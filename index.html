@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數學四則運算錯題偵探研究所 </title>
+    <title>數學錯題偵探研究所 | 雙生智庫</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- QRCode.js -->
@@ -51,9 +51,8 @@
                 <span class="text-2xl">🔍</span>
                 <h1 class="text-xl font-black text-orange-600">數學錯題偵探研究所</h1>
             </div>
-            <div class="space-x-2">
-                <button onclick="switchView('student')" id="nav-student-btn" class="px-4 py-1.5 rounded-xl text-sm anime-btn bg-orange-400 text-white">學生闖關</button>
-                <button onclick="switchView('teacher')" id="nav-teacher-btn" class="px-4 py-1.5 rounded-xl text-sm anime-btn bg-slate-200 text-slate-700">教師後台</button>
+            <div>
+                <span class="px-3 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded-full border-2 border-slate-800">✨ 公開觀課專用</span>
             </div>
         </div>
     </header>
@@ -61,7 +60,7 @@
     <!-- Main Container -->
     <main class="max-w-3xl w-full mx-auto p-4 md:p-6 my-auto">
 
-        <!-- 學生端 -->
+        <!-- 學生端 / 主畫面 -->
         <div id="view-student" class="space-y-6">
             <div id="screen-login" class="anime-box p-8 text-center space-y-6">
                 <div class="space-y-2">
@@ -138,24 +137,6 @@
             </div>
         </div>
 
-        <!-- 教師端後台 -->
-        <div id="view-teacher" class="hidden space-y-6">
-            <div id="teacher-login-box" class="anime-box p-8 max-w-sm mx-auto space-y-4 text-center">
-                <h2 class="text-xl font-black text-slate-800">🔐 教師管理後台</h2>
-                <input type="password" id="teacher-pwd" placeholder="預設密碼:1234701" class="w-full px-4 py-2 border-2 border-slate-800 rounded-xl text-center font-bold">
-                <button onclick="verifyTeacher()" class="w-full py-2.5 bg-orange-500 text-white rounded-xl anime-btn">登入後台</button>
-            </div>
-
-            <div id="teacher-dashboard" class="hidden anime-box p-6 space-y-6">
-                <div class="flex justify-between items-center pb-4 border-b-2 border-slate-200">
-                    <h2 class="text-xl font-black text-slate-800">📊 觀課迷思分析儀表板</h2>
-                    <div class="space-x-2">
-                        <button onclick="clearData()" class="px-3 py-1.5 bg-rose-200 text-rose-900 text-sm rounded-xl anime-btn">清除本地暫存</button>
-                    </div>
-                </div>
-                <p class="text-xs text-slate-600 font-bold">💡 提示：所有學生的作答紀錄已透過 API 即時寫入您的 **Google 試算表後端**（僅記錄班級與座號），您可直接打開該試算表進行分析或匯出！</p>
-            </div>
-        </div>
     </main>
 
     <!-- Footer -->
@@ -215,16 +196,6 @@
                 text: currentUrl, width: 120, height: 120
             });
         };
-
-        function switchView(view) {
-            if (view === 'student') {
-                document.getElementById('view-student').classList.remove('hidden');
-                document.getElementById('view-teacher').classList.add('hidden');
-            } else {
-                document.getElementById('view-student').classList.add('hidden');
-                document.getElementById('view-teacher').classList.remove('hidden');
-            }
-        }
 
         function startQuiz() {
             const cls = document.getElementById('input-class').value.trim();
@@ -330,17 +301,6 @@
                     body: JSON.stringify(payload)
                 }).catch(err => console.log("雲端同步錯誤:", err));
             }
-        }
-
-        function verifyTeacher() {
-            if (document.getElementById('teacher-pwd').value === '701') {
-                document.getElementById('teacher-login-box').classList.add('hidden');
-                document.getElementById('teacher-dashboard').classList.remove('hidden');
-            } else { alert('密碼錯誤！(預設: 701)'); }
-        }
-
-        function clearData() {
-            if (confirm("確定清除本地暫存？")) { localStorage.clear(); alert("已清除"); }
         }
     </script>
 </body>
