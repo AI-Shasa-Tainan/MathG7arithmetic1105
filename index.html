@@ -99,7 +99,7 @@
                 <div class="space-y-4">
                     <div class="p-4 bg-orange-50 rounded-xl border-2 border-slate-800">
                         <span class="text-xs font-black text-orange-700">🎯 任務目標：找出下列計算的錯誤之處</span>
-                        <div id="question-text" class="text-lg font-bold mt-2 text-slate-900"></div>
+                        <div id="question-text" class="text-lg font-bold mt-2 text-slate-1000"></div>
                     </div>
 
                     <div class="p-4 bg-rose-50 rounded-xl border-2 border-slate-800">
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-sm font-bold text-slate-800">💬 請問錯誤發生在哪一個步驟？</label>
+                    <label class="block text-sm font-bold text-slate-1000">💬 請問錯誤發生在哪一個步驟？</label>
                     <div id="options-container" class="space-y-2"></div>
                 </div>
 
@@ -146,9 +146,18 @@
 
     <!-- Script -->
     <script>
-        // 30 題純整數與分數四則運算經典錯題庫（完全無文字符號變數）
+        // 50 題純整數與分數四則運算經典錯題庫（完全無文字符號變數）
         const QUESTION_BANK = [
-            { id: 1, topic: "負號去括號變號錯誤", question: "$15 - [3 - 2 \\times (5 - 8)]$", wrong_process: "1. 先算括號：$5 - 8 = -3$\n2. 乘法：$2 \\times (-3) = -6$\n3. 去括號：$15 - [3 - (-6)] = 15 - 3 - 6 = 6$", wrong_step: "第 3 步（去括號未變號）", options: ["第 1 步", "第 2 步", "第 3 步 (去括號未變號)", "完全正確"], correct: 2, explanation: "減去負數等於加上正數，應為 $3 + 6 = 9$。" },
+            { 
+    id: 1, 
+    topic: "負號去括號變號錯誤", 
+    question: "$15 - [3 - 2 \\times (1 - 4)]$", 
+    wrong_process: "1. 先算括號：$1 - 4 = -3$\n2. 乘法：$2 \\times (-3) = -6$\n3. 去括號：$15 - [3 - (-6)] = 15 - 3 - 6 = 6$", 
+    wrong_step: "第 3 步（去括號未變號）", 
+    options: ["第 1 步", "第 2 步", "第 3 步 (去括號未變號)", "完全正確"], 
+    correct: 2, 
+    explanation: "正確計算應為：$15 - [3 - (-6)] = 15 - (3 + 6) = 15 - 9 = 6$。雖然結果碰巧算對，但第 3 步去中括號時，前方有負號，內部 $-6$ 未變號為 $+6$，過程觀念有瑕疵。" 
+},
             { id: 2, topic: "運算順序由左至右錯誤", question: "$24 \\div 4 \\times 2 + 3 \\times (5 - 2)$", wrong_process: "1. 算括號：$5 - 2 = 3$\n2. 後方乘法：$2 \\times 3 = 6$\n3. 前方除法：$24 \\div 4 = 6$\n4. 相乘：$6 \\times 6 = 36$", wrong_step: "未由左至右計算", options: ["第 1 步", "第 2、3 步 (未由左至右)", "第 4 步", "完全正確"], correct: 1, explanation: "乘除法同級，必須由左至右計算。" },
             { id: 3, topic: "分配律負號漏乘", question: "$-3 \\times [12 + (-4) - 7]$", wrong_process: "1. 展開：$(-3) \\times 12 + (-3) \\times (-4) - 7$\n2. 計算：$-36 + 12 - 7 = -31$", wrong_step: "分配律漏乘最後一項", options: ["第 1 步 (漏乘最後一項)", "第 2 步", "正負號錯誤", "完全正確"], correct: 0, explanation: "外面的 $-3$ 必須乘以括號內每一項。" },
             { id: 4, topic: "帶分數未化假分數", question: "$2\\frac{1}{3} \\times 1\\frac{1}{4}$", wrong_process: "1. 整數乘整數：$2 \\times 1 = 2$\n2. 分數乘分數：$\\frac{1}{12}$\n3. 組合：$2\\frac{1}{12}$", wrong_step: "帶分數未化假分數", options: ["第 1 步", "第 1、2 步 (未化假分數)", "第 3 步", "完全正確"], correct: 1, explanation: "帶分數相乘必須先化為假分數再計算。" },
