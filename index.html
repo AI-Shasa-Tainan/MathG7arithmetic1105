@@ -98,12 +98,12 @@
 
                 <div class="space-y-4">
                     <div class="p-4 bg-orange-50 rounded-xl border-2 border-slate-800">
-                        <span class="text-xs font-black text-orange-700">🎯 任務目標：找出下列計算的錯誤之處</span>
+                        <span class="text-xs font-black text-orange-1000">🎯 任務目標：找出下列計算的錯誤之處</span>
                         <div id="question-text" class="text-lg font-bold mt-2 text-slate-1000"></div>
                     </div>
 
                     <div class="p-4 bg-rose-50 rounded-xl border-2 border-slate-800">
-                        <span class="text-xs font-black text-rose-700">❌ 學生錯誤計算過程</span>
+                        <span class="text-xs font-black text-rose-1000">❌ 學生錯誤計算過程</span>
                         <div id="wrong-process" class="mt-2 text-slate-1000 whitespace-pre-line font-mono text-sm"></div>
                     </div>
                 </div>
@@ -146,13 +146,13 @@
 
     <!-- Script -->
     <script>
-        // 50 題純整數與分數四則運算經典錯題庫（完全無文字符號變數）
+        // 30 題純整數與分數四則運算經典錯題庫（完全無文字符號變數）
         const QUESTION_BANK = [
             { 
     id: 1, 
     topic: "負號去括號變號錯誤", 
     question: "$15 - [3 - 2 \\times (1 - 4)]$", 
-    wrong_process: "1. 先算括號：$1 - 4 = -3$\n2. 乘法：$2 \\times (-3) = -6$\n3. 去括號：$15 - [3 - (-6)] = 15 - 3 - 6 = 6$", 
+    wrong_process: "1. 先算括號：$1 - 4 = -3$\n2. 乘法：$2 \\times (-3) = -6$\n3. 去括號：$15 - [3 - (-6)] = 15 - 3 + 6 = 18$", 
     wrong_step: "第 3 步（去括號未變號）", 
     options: ["第 1 步", "第 2 步", "第 3 步 (去括號未變號)", "完全正確"], 
     correct: 2, 
