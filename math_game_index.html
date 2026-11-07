@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國一數學：分數四則運算大挑戰</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', 'Fredoka', sans-serif; }
+        .font-fredoka { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-indigo-50 min-h-screen text-slate-800 flex flex-col items-center justify-center p-4">
+
+    <!-- 主容器 -->
+    <div class="max-w-3xl w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-indigo-100">
+        
+        <!-- 頂部標題列 -->
+        <div class="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-white text-center relative">
+            <h1 class="text-3xl font-bold font-fredoka tracking-wide">Math Hero: 錯題大作戰</h1>
+            <p class="text-indigo-200 text-sm mt-1">國一數學 Ch2-3 分數的四則運算經典錯題挑戰</p>
+        </div>
+
+        <!-- 登入畫面 -->
+        <div id="login-screen" class="p-8 text-center space-y-6">
+            <div class="bg-indigo-50 p-6 rounded-2xl max-w-md mx-auto border border-indigo-100">
+                <h2 class="text-xl font-bold text-indigo-900 mb-4">請輸入您的班級與座號</h2>
+                <div class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">班級</label>
+                        <input type="text" id="class-input" placeholder="例如：701" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">座號</label>
+                        <input type="number" id="seat-input" placeholder="例如：15" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">姓名</label>
+                        <input type="text" id="name-input" placeholder="例如：林小明" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                </div>
+                <button onclick="startGame()" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95">
+                    開始挑戰 10 道題
+                </button>
+            </div>
+        </div>
+
+        <!-- 遊戲主畫面 (預設隱藏) -->
+        <div id="game-screen" class="p-8 hidden space-y-6">
+            <!-- 進度與分數列 -->
+            <div class="flex justify-between items-center bg-slate-50 px-4 py-3 rounded-xl border">
+                <span id="progress-text" class="text-sm font-bold text-indigo-600">第 1 題 / 共 10 題</span>
+                <span id="score-text" class="text-sm font-bold text-emerald-600">得分：0</span>
+            </div>
+
+            <!-- 題目卡片 -->
+            <div class="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100 space-y-4">
+                <div class="text-xs font-semibold text-indigo-500 uppercase tracking-wider">挑戰題目</div>
+                <div id="question-title" class="text-2xl font-bold text-slate-900 font-mono"></div>
+                
+                <div class="mt-4">
+                    <div class="text-xs font-semibold text-rose-500 uppercase tracking-wider mb-2">同學的計算過程（其中包含錯誤）：</div>
+                    <div id="incorrect-steps" class="bg-white p-4 rounded-xl border border-rose-100 space-y-2 text-slate-700 font-mono text-sm"></div>
+                </div>
+            </div>
+
+            <!-- 互動問答區 -->
+            <div class="space-y-4">
+                <h3 class="font-bold text-slate-700">Q1: 請問錯誤發生在哪一個步驟？</h3>
+                <div id="step-options" class="grid grid-cols-2 gap-3"></div>
+
+                <div id="reason-section" class="hidden space-y-3 pt-4 border-t">
+                    <h3 class="font-bold text-slate-700">Q2: 請選出正確的觀念解釋：</h3>
+                    <div id="reason-options" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- 立即解析回饋 (答題後顯示) -->
+            <div id="feedback-box" class="hidden p-4 rounded-xl border"></div>
+
+            <!-- 下一題按鈕 -->
+            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+                下一題
+            </button>
+        </div>
+
+        <!-- 結算畫面 (預設隱藏) -->
+        <div id="result-screen" class="p-8 text-center hidden space-y-6">
+            <div class="text-5xl">🏆</div>
+            <h2 class="text-3xl font-bold text-slate-900">挑戰完成！</h2>
+            <p id="final-score" class="text-xl text-indigo-600 font-bold"></p>
+            <div id="student-info-summary" class="text-slate-500 text-sm"></div>
+            <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition">
+                再玩一次
+            </button>
+        </div>
+
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
