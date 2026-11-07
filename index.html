@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>數學四則運算錯題偵探研究所</title>
+    <title>數學分數四則運算錯題偵探研究所 </title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- QRCode.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- MathJax 數學公式渲染 -->
+    <!-- MathJax 科技輔助自主學習公開觀課 -->
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
@@ -49,10 +49,10 @@
         <div class="max-w-4xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <span class="text-2xl">🔍</span>
-                <h1 class="text-xl font-black text-orange-600">數學四則運算錯題偵探研究所</h1>
+                <h1 class="text-xl font-black text-orange-600">數學分數四則運算錯題偵探研究所</h1>
             </div>
             <div>
-                <span class="px-3 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded-full border-2 border-slate-800">✨ 公開觀課</span>
+                <span class="px-3 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded-full border-2 border-slate-800">✨ 公開觀課專用</span>
             </div>
         </div>
     </header>
@@ -64,9 +64,9 @@
         <div id="view-student" class="space-y-6">
             <div id="screen-login" class="anime-box p-8 text-center space-y-6">
                 <div class="space-y-2">
-                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded-full border-2 border-slate-800">✨ 國一數學四則運算錯題偵測_四學公開觀課</span>
+                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded-full border-2 border-slate-800">✨ 國一數學分數四則運算・四學公開觀課</span>
                     <h2 class="text-2xl font-black text-slate-800">挑戰你的數學火眼金睛！</h2>
-                    <p class="text-slate-600 text-sm">從 30 道純整數與分數大題庫中隨機抽選 10 題迷思題，找出藏在計算過程中的破綻！</p>
+                    <p class="text-slate-600 text-sm">從 50 道嚴格查修之純整數與分數大題庫中隨機抽選 10 題迷思題，找出計算破綻！</p>
                 </div>
 
                 <div class="max-w-xs mx-auto space-y-4 text-left">
@@ -102,14 +102,15 @@
                         <div id="question-text" class="text-lg font-bold mt-2 text-slate-1000"></div>
                     </div>
 
-                    <div class="p-4 bg-rose-50 rounded-xl border-2 border-slate-800">
-                        <span class="text-xs font-black text-rose-1000">❌ 學生錯誤計算過程</span>
-                        <div id="wrong-process" class="mt-2 text-slate-1000 whitespace-pre-line font-mono text-sm"></div>
+                    <div class="p-4 bg-rose-50 rounded-xl border-2 border-slate-1000">
+                        <span class="text-xs font-black text-rose-700">❌ 學生錯誤計算過程</span>
+                        <!-- 放大字體至 text-lg font-bold -->
+                        <div id="wrong-process" class="mt-2 text-slate-900 whitespace-pre-line font-mono text-lg font-bold"></div>
                     </div>
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-sm font-bold text-slate-1000">💬 請問錯誤發生在哪一個步驟？</label>
+                    <label class="block text-lg font-bold text-slate-800">💬 請問錯誤發生在哪一個步驟？</label>
                     <div id="options-container" class="space-y-2"></div>
                 </div>
 
@@ -141,14 +142,13 @@
 
     <!-- Footer -->
     <footer class="text-center py-6 text-xs font-bold text-slate-500 border-t-4 border-slate-800 bg-white mt-12">
-        Shasa LaLa x 四則運算錯題公開觀課專用系統 &copy; 2026
+        Shasa LaLa x 科技輔助資主學習 公開觀課專用系統 &copy; 2026
     </footer>
 
     <!-- Script -->
-  <script>
+    <script>
         // 20 題完全查修確認之純數字經典迷思題庫
         const QUESTION_BANK = [
-            [
   {
     "id": 1,
     "question": "2/3 + (-3/5)",
@@ -157,7 +157,11 @@
       "步驟二：計算結果為 -1 / 8"
     ],
     "error_step": "步驟一",
-    "explanation": "異分母分數相加減時，分母絕對不能直接相加。必須先求出分母 3 與 5 的最小公倍數進行「通分」，分母保持不變，僅分子進行加減運算。"
+    "explanation": "異分母分數相加減時，分母絕對不能直接相加。必須先求出分母 3 與 5 的最小公倍數進行「通分」，分母保持不變，僅分子進行加減運算。",
+    "distractors": [
+      "通分時分子沒有乘以對應的擴分倍數",
+      "正負數相加時忘記加上負號"
+    ]
   },
   {
     "id": 2,
@@ -167,7 +171,11 @@
       "步驟二：合併同分母項：(-5 - 12)/17 - 5/4 = -17/17 - 5/4 = -1 - 5/4 = -9/4"
     ],
     "error_step": "步驟一",
-    "explanation": "括號前面是負號（減號）時，去括號且去掉小括號內部各項時必須全部「變號」。正確去括號應為：-5/17 - 12/17 + 5/4。"
+    "explanation": "括號前面是負號（減號）時，去括號且去掉小括號內部各項時必須全部「變號」。正確去括號應為：-5/17 - 12/17 + 5/4。",
+    "distractors": [
+      "去括號時漏掉了第一個分數的負號",
+      "通分時分母計算錯誤"
+    ]
   },
   {
     "id": 3,
@@ -177,7 +185,11 @@
       "步驟二：計算各項並相加得到結果"
     ],
     "error_step": "步驟一",
-    "explanation": "「乘法」對加減法具有分配律，但「除法對加減法沒有分配律」。除法無法直接分配進括號內，必須先計算括號內通分後的和，再進行除法運算。"
+    "explanation": "「乘法」對加減法具有分配律，但「除法對加減法沒有分配律」。除法無法直接分配進括號內，必須先計算括號內通分後的和，再進行除法運算。",
+    "distractors": [
+      "將除法改成乘法時沒有顛倒上下分子分母",
+      "計算時沒有先算括號內反而先算外圍乘除"
+    ]
   },
   {
     "id": 4,
@@ -187,7 +199,11 @@
       "步驟二：相乘後忽略負號：(7/3) * (3/4) = 7/4"
     ],
     "error_step": "步驟二",
-    "explanation": "兩數相乘時，同號得正、異號得負。兩個負數相乘（負負得正）其積應為正數，但步驟二漏掉了正負號的判定規則。"
+    "explanation": "兩數相乘時，同號得正、異號得負。兩個負數相乘（負負得正）其積應為正數，但步驟二漏掉了正負號的判定規則。",
+    "distractors": [
+      "帶分數化為假分數時整數部分乘錯",
+      "約分時將分子與分母顛倒"
+    ]
   },
   {
     "id": 5,
@@ -197,7 +213,11 @@
       "步驟二：計算最終數值"
     ],
     "error_step": "步驟一",
-    "explanation": "分數除法不能直接分子除分子、分母除分母。正確做法是「除以一個不為 0 的數，等於乘以這個數的倒數」：4/7 * (-11/9)。"
+    "explanation": "分數除法不能直接分子除分子、分母除分母。正確做法是「除以一個不為 0 的數，等於乘以這個數的倒數」：4/7 * (-11/9)。",
+    "distractors": [
+      "顛倒除數時沒有同時改變正負號",
+      "通分時找錯了公分母"
+    ]
   },
   {
     "id": 6,
@@ -207,7 +227,11 @@
       "步驟二：計算結果為 7/19"
     ],
     "error_step": "步驟一",
-    "explanation": "括號前方為減號，去括號時括號內的每一項都要變號。正確去括號應為：8/15 - 8/15 - 7/19，結果應為 -7/19。"
+    "explanation": "括號前方為減號，去括號時括號內的每一項都要變號。正確去括號應為：8/15 - 8/15 - 7/19，結果應為 -7/19。",
+    "distractors": [
+      "交換律使用錯誤導致正負號顛倒",
+      "通分時分母相加而非保持不變"
+    ]
   },
   {
     "id": 7,
@@ -217,7 +241,11 @@
       "步驟二：分子相加：(-3 + -8)/35 = -11/35"
     ],
     "error_step": "步驟一",
-    "explanation": "分母由 5 變為 35 擴大了 7 倍，分子 -3 也必須乘以 7 變成 -21；同理分母 7 變 35 擴大 5 倍，分子 -8 乘以 5 變成 -40。擴分時分子分母必須同乘以相同的數。"
+    "explanation": "分母由 5 變為 35 擴大了 7 倍，分子 -3 也必須乘以 7 變成 -21；同理分母 7 變 35 擴大 5 倍，分子 -8 乘以 5 變成 -40。擴分時分子分母必須同乘以相同的數。",
+    "distractors": [
+      "異分母相加時直接把分子相加",
+      "正負數絕對值相加時搞錯方向"
+    ]
   },
   {
     "id": 8,
@@ -227,7 +255,11 @@
       "步驟二：所以 -2/9 > -1/6"
     ],
     "error_step": "步驟二",
-    "explanation": "兩個負數比較大小時，絕對值越大其值反而越小。應先通分絕對值：|-2/9| = 4/18，|-1/6| = 3/18，因 4/18 > 3/18，故 -2/9 < -1/6。"
+    "explanation": "兩個負數比較大小時，絕對值越大其值反而越小。應先通分絕對值：|-2/9| = 4/18，|-1/6| = 3/18，因 4/18 > 3/18，故 -2/9 < -1/6。",
+    "distractors": [
+      "通分時分母計算錯誤",
+      "誤以為負數絕對值大其值就大"
+    ]
   },
   {
     "id": 9,
@@ -237,7 +269,11 @@
       "步驟二：計算結果"
     ],
     "error_step": "步驟一",
-    "explanation": "減去一個負數等於加上其相反數。-3(4/7) - (-2(1/7)) 應化為 -3(4/7) + 2(1/7)，去括號後整數與分數的符號處理應為：-3 - 4/7 + 2 + 1/7。"
+    "explanation": "減去一個負數等於加上其相反數。-3(4/7) - (-2(1/7)) 應化為 -3(4/7) + 2(1/7)，去括號後整數與分數的符號處理應為：-3 - 4/7 + 2 + 1/7。",
+    "distractors": [
+      "帶分數轉假分數時符號放錯位置",
+      "整數部分與分數部分相減時方向錯誤"
+    ]
   },
   {
     "id": 10,
@@ -247,110 +283,13 @@
       "步驟二：計算結果"
     ],
     "error_step": "步驟一",
-    "explanation": "乘法對加法的分配律必須將括號外的因數分別乘以括號內的「每一項」，漏掉了第二項與 7/5 的相乘。正確應為：7/5 * (-20) + 7/5 * 5/7。"
-  },
-  {
-    "id": 11,
-    "question": "化簡 -16/64 為最簡分數",
-    "incorrect_steps": [
-      "步驟一：只把分子除以 4：- (16 / 4) / 64 = -4 / 64",
-      "步驟二：得到 -4 / 64"
-    ],
-    "error_step": "步驟一",
-    "explanation": "約分時必須將分子和分母「同除以」它們的公因數，不能只對分子或分母單獨除以某數，否則會改變分數的值。"
-  },
-  {
-    "id": 12,
-    "question": "2/3 + [(-2/3) + 11/13]",
-    "incorrect_steps": [
-      "步驟一：去中括號時全部變號：2/3 - 2/3 - 11/13",
-      "步驟二：計算結果"
-    ],
-    "error_step": "步驟一",
-    "explanation": "括號前面如果是加號（或中括號內維持加法），去括號時括號內的項符號維持不變。正確去括號應為：2/3 - 2/3 + 11/13。"
-  },
-  {
-    "id": 13,
-    "question": "求 -3(2/5) 的倒數",
-    "incorrect_steps": [
-      "步驟一：化為假分數：-17/5",
-      "步驟二：求倒數為 5/17"
-    ],
-    "error_step": "步驟二",
-    "explanation": "正數的倒數為正數，負數的倒數仍為負數。-17/5 的倒數應為 -5/17，不可漏掉負號。"
-  },
-  {
-    "id": 14,
-    "question": "(-2) * 2/5 + (-4/7) * 1(3/4)",
-    "incorrect_steps": [
-      "步驟一：先算前面的加法：(-2) + (-4/7)",
-      "步驟二：再與後面的數相乘"
-    ],
-    "error_step": "步驟一",
-    "explanation": "四則運算規則為「先乘除，後加減」。必須先計算兩段乘積，再將結果相加，不能擅自先做加法。"
-  },
-  {
-    "id": 15,
-    "question": "(-1/2) * 5/6 * 1(1/3)",
-    "incorrect_steps": [
-      "步驟一：判定正負號，認為含有負數所以結果為正：+(1/2 * 5/6 * 4/3)",
-      "步驟二：計算最終數值"
-    ],
-    "error_step": "步驟一",
-    "explanation": "多個不為零的分數連乘時，如果其中含有「奇數個」負數，其積為負數；本題只有 1 個負數（奇數個），積應為負數。"
-  },
-  {
-    "id": 16,
-    "question": "計算數線上坐標 -2(1/6) 與 5(2/3) 的距離",
-    "incorrect_steps": [
-      "步驟一：直接相減：-2(1/6) - 5(2/3)",
-      "步驟二：得到 -7(5/6) 作為距離"
-    ],
-    "error_step": "步驟一",
-    "explanation": "數線上兩點間的距離必須使用「絕對值」，距離恆為非負數。正確應為 |-2(1/6) - 5(2/3)| = 7(5/6)。"
-  },
-  {
-    "id": 17,
-    "question": "求 5/8 的倒數",
-    "incorrect_steps": [
-      "步驟一：把分子分母變號：-5/8",
-      "步驟二：得到倒數為 -5/8"
-    ],
-    "error_step": "步驟一",
-    "explanation": "倒數定義為兩數乘積為 1。正分數 5/8 的倒數是將分子分母上下顛倒，即 8/5，不需要改變正負號。"
-  },
-  {
-    "id": 18,
-    "question": "2/3 - 1/2",
-    "incorrect_steps": [
-      "步驟一：分子相減、分母相減：(2 - 1) / (3 - 2)",
-      "步驟二：得到 1 / 1 = 1"
-    ],
-    "error_step": "步驟一",
-    "explanation": "異分母分數相減必須先通分使分母相同（最小公倍數為 6），分母保持不變，僅分子相減。正確為：4/6 - 3/6 = 1/6。"
-  },
-  {
-    "id": 19,
-    "question": "3/5 / (-9/14) * 2(6/7)",
-    "incorrect_steps": [
-      "步驟一：先將後面的乘法加括號優先算：3/5 / (-9/14 * 20/7)",
-      "步驟二：計算結果"
-    ],
-    "error_step": "步驟一",
-    "explanation": "乘除混合運算應由左而右依序計算，或者將除法統一改為乘以倒數後從左到右連乘，不能擅自改變結合順序先算後面的乘法。"
-  },
-  {
-    "id": 20,
-    "question": "3(1/4) - 1(3/4)",
-    "incorrect_steps": [
-      "步驟一：整數相減，分數直接用大的減小的：(3 - 1) + (3/4 - 1/4)",
-      "步驟二：得到 2 + 2/4 = 2(1/2)"
-    ],
-    "error_step": "步驟一",
-    "explanation": "被減數的分數小於減數的分數時（1/4 < 3/4），不能直接把大的減小的。必須向整數部分借 1（即 4/4）變成 2(5/4) - 1(3/4)，或先將帶分數全部化為假分數再計算。"
+    "explanation": "乘法對加法的分配律必須將括號外的因數分別乘以括號內的「每一項」，漏掉了第二項與 7/5 的相乘。正確應為：7/5 * (-20) + 7/5 * 5/7。",
+    "distractors": [
+      "分配律展開時符號變號錯誤",
+      "約分時將分子分母乘錯數字"
+    ]
   }
-]
-        ];
+];
 
         let currentQuizQuestions = [];
         let currentQuestionIndex = 0;
