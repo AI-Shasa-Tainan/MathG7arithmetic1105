@@ -146,59 +146,210 @@
 
     <!-- Script -->
   <script>
-        // 50 題完全查修確認之純數字經典迷思題庫
+        // 20 題完全查修確認之純數字經典迷思題庫
         const QUESTION_BANK = [
-            { id: 1, topic: "負號去括號變號錯誤", question: "$15 - [3 - 2 \\times (1 - 4)]$", wrong_process: "1. 先算括號：$1 - 4 = -3$\n2. 乘法：$2 \\times (-3) = -6$\n3. 去括號：$15 - [3 - (-6)] = 15 - 3 - 6 = 6$", wrong_step: "第 3 步（去括號未變號）", options: ["第 1 步", "第 2 步", "第 3 步 (去括號未變號)", "完全正確"], correct: 2, explanation: "減去負數應變號為加上正數，正確應為 $15 - 3 + 6 = 18$，學生第 3 步去括號未變號且結果邏輯有誤。" },
-            { id: 2, topic: "運算順序由左至右錯誤", question: "$24 \\div 4 \\times 2 + 3 \\times (5 - 2)$", wrong_process: "1. 算括號：$5 - 2 = 3$\n2. 後方乘法：$2 \\times 3 = 6$\n3. 前方除法：$24 \\div 4 = 6$\n4. 相乘：$6 \\times 6 = 36$", wrong_step: "未由左至右計算", options: ["第 1 步", "第 2、3 步 (未由左至右)", "第 4 步", "完全正確"], correct: 1, explanation: "乘除法同級，必須由左至右計算，不應先算後方的乘法。" },
-            { id: 3, topic: "分配律負號漏乘", question: "$-3 \\times [12 + (-4) - 7]$", wrong_process: "1. 展開：$(-3) \\times 12 + (-3) \\times (-4) - 7$\n2. 計算：$-36 + 12 - 7 = -31$", wrong_step: "分配律漏乘最後一項", options: ["第 1 步 (漏乘最後一項)", "第 2 步", "正負號錯誤", "完全正確"], correct: 0, explanation: "外面的 $-3$ 必須乘以括號內每一項，最後一項 $-7$ 漏乘了。" },
-            { id: 4, topic: "帶分數未化假分數", question: "$2\\frac{1}{3} \\times 1\\frac{1}{4}$", wrong_process: "1. 整數乘整數：$2 \\times 1 = 2$\n2. 分數乘分數：$\\frac{1}{12}$\n3. 組合：$2\\frac{1}{12}$", wrong_step: "帶分數未化假分數", options: ["第 1 步", "第 1、2 步 (未化假分數)", "第 3 步", "完全正確"], correct: 1, explanation: "帶分數相乘必須先化為假分數再計算，不能整數與分數分開相乘。" },
-            { id: 5, topic: "異分母加法分母相加", question: "$1 \\div \\left(\\frac{1}{2} + \\frac{1}{3}\\right)$", wrong_process: "1. 括號內相加：$\\frac{1+1}{2+3} = \frac{2}{5}$\n2. 除法：$\\frac{5}{2}$", wrong_step: "分母直接相加", options: ["第 1 步 (分母直接相加)", "第 2 步", "運算順序錯誤", "完全正確"], correct: 0, explanation: "分數相加減必須先通分才能相加，分母絕對不能直接相加。" },
-            { id: 6, topic: "分子含有加法時錯誤約分", question: "$\\frac{3 + 6}{3}$", wrong_process: "1. 約分：分子分母的 3 互相約掉 $\\rightarrow \\frac{1 + 6}{1} = 7$", wrong_step: "單獨約分加法項", options: ["第 1 步 (不能單獨約分加法項)", "加法錯誤", "完全正確"], correct: 0, explanation: "分子的 $3 + 6$ 是一個整體，應先算分子 $(9)$ 再除以分母 $(3)$ 得 $3$。" },
-            { id: 7, topic: "通分後分子未同步擴分", question: "$\\frac{3}{4} - \\frac{1}{6}$", wrong_process: "1. 分母變 12，分子照抄：$\\frac{3}{12} - \\frac{1}{12}$", wrong_step: "分子未同步擴分", options: ["公因數找錯", "分子未同步擴分", "完全正確"], correct: 1, explanation: "分母乘幾，分子也要同步擴分，分母變 12 時分子應分別變為 9 與 2。" },
-            { id: 8, topic: "混合運算顛倒先後順序", question: "$2 - \\frac{3}{4} \\div \\frac{9}{8}$", wrong_process: "1. 先算減法 $2 - \\frac{3}{4} = \\frac{5}{4}$", wrong_step: "先做了減法", options: ["應先算除法", "倒數錯誤", "完全正確"], correct: 0, explanation: "乘除法優先於加減法，應先算後方的除法。" },
-            { id: 9, topic: "除法對乘法做錯誤分配", question: "$5 \\div \\left(\\frac{1}{2} \\times \\frac{1}{3}\\right)$", wrong_process: "1. 錯誤分配：$5 \\div \\frac{1}{2} + 5 \\div \\frac{1}{3}$", wrong_step: "除法對乘法做錯誤分配", options: ["錯誤分配乘法括號", "計算錯誤", "完全正確"], correct: 0, explanation: "括號內是乘法時不能分配除法，應先算括號內相乘。" },
-            { id: 10, topic: "負數奇數次方觀念錯誤", question: "$(-2)^3 - 5$", wrong_process: "1. $(-2)^3 = 8$", wrong_step: "負數奇數次方正負號錯誤", options: ["負數奇數次方正負號錯誤", "減法錯誤", "完全正確"], correct: 0, explanation: "$(-2)$ 的三次方應為 $-8$，故結果為 $-8 - 5 = -13$。" },
-            { id: 11, topic: "正負數加減法符號迷思", question: "$-5 - (-8)$", wrong_process: "$-5 - 8 = -13$", wrong_step: "去括號變號錯誤", options: ["減負數等於加正數", "減法變號錯誤", "完全正確"], correct: 0, explanation: "減去負數等於加上正數，$-5 + 8 = 3$。" },
-            { id: 12, topic: "常數項分配律負號漏乘", question: "$-3 \\times (4 - 5)$", wrong_process: "$-3 \\times 4 - 5 = -17$", wrong_step: "第二項變號與漏乘錯誤", options: ["漏掉負負得正與乘法", "係數相乘錯誤", "完全正確"], correct: 0, explanation: "$-3 \\times (-5) = +15$，正確為 $-12 + 15 = 3$。" },
-            { id: 13, topic: "分數除法未將除數倒數", question: "$\\frac{2}{3} \\div \\frac{4}{5}$", wrong_process: "$\\frac{2}{3} \\times \\frac{4}{5} = \\frac{8}{15}$", wrong_step: "未將除數倒數", options: ["未將除數倒數", "分子相乘錯誤", "完全正確"], correct: 0, explanation: "除以一個數等於乘以其倒數，應為 $\\frac{2}{3} \\times \\frac{5}{4} = \\frac{5}{6}$。" },
-            { id: 14, topic: "分數平方範圍錯誤", question: "$(-\\frac{2}{3})^2$", wrong_process: "$-\\frac{4}{9}$", wrong_step: "負號未一同平方", options: ["負號未一同平方", "分子平方錯誤", "完全正確"], correct: 0, explanation: "負號受括號平方影響，結果應為正的 $\\frac{4}{9}$。" },
-            { id: 15, topic: "括號外負號與運算順序錯誤", question: "$10 - 2^3$", wrong_process: "$(10 - 2)^3 = 8^3 = 512$", wrong_step: "擅自加括號改變運算順序", options: ["擅自加括號改變次方順序", "指數計算錯誤", "完全正確"], correct: 0, explanation: "應先算次方 $2^3 = 8$，再做減法 $10 - 8 = 2$。" },
-            { id: 16, topic: "分數加減通分倍數錯誤", question: "$\\frac{1}{3} + \\frac{1}{4}$", wrong_process: "$\\frac{4}{7} + \\frac{3}{7}$", wrong_step: "分母相加而非找公倍數", options: ["分母相加錯誤", "通分倍數錯誤", "完全正確"], correct: 0, explanation: "應找最小公倍數 12 通分，而不是分母直接相加。" },
-            { id: 17, topic: "連續除法順序錯誤", question: "$12 \\div 3 \\div 2$", wrong_process: "$12 \\div (3 \\div 2) = 8$", wrong_step: "未由左至右計算", options: ["未由左至右計算", "除法錯誤", "完全正確"], correct: 0, explanation: "連續除法應由左至右依序計算：$12 \\div 3 = 4$，$4 \\div 2 = 2$。" },
-            { id: 18, topic: "整數與分數相加通分錯誤", question: "$2 + \\frac{1}{3}$", wrong_process: "$\\frac{2}{3}$", wrong_step: "整數未化為同分母", options: ["整數未化為同分母", "加法錯誤", "完全正確"], correct: 0, explanation: "2 應化為 $\\frac{6}{3}$ 再相加，結果為 $\\frac{7}{3}$。" },
-            { id: 19, topic: "括號前負號去括號漏變號", question: "$10 - (2 + 3 - 4)$", wrong_process: "$10 - 2 + 3 - 4$", wrong_step: "括號內未全面變號", options: ["僅第一項變號", "計算錯誤", "完全正確"], correct: 0, explanation: "括號前是負號，展開應每項變號：$10 - 2 - 3 + 4 = 9$。" },
-            { id: 20, topic: "分數乘法約分觀念錯誤", question: "$\\frac{3}{4} \\times \\frac{8}{9}$", wrong_process: "$\\frac{24}{13}$", wrong_step: "分子分母互相亂加", options: ["分子分母計算錯誤", "未正確約分", "完全正確"], correct: 0, explanation: "應為交叉約分：$\\frac{3}{4} \\times \\frac{8}{9} = \\frac{2}{3}$。" },
-            { id: 21, topic: "負數加法方向錯誤", question: "$(-12) + 7$", wrong_process: "$+19$", wrong_step: "異號相加誤算成相加", options: ["異號相加應相減", "加法錯誤", "完全正確"], correct: 0, explanation: "異號相加應相減並取絕對值較大者符號，結果為 $-5$。" },
-            { id: 22, topic: "指數律乘法底數相加錯誤", question: "$2^3 \\times 2^2$", wrong_process: "$2^6$", wrong_step: "指數相乘錯誤", options: ["指數相乘錯誤", "底數相乘錯誤", "完全正確"], correct: 0, explanation: "同底數相乘，指數相加得 $2^5$。" },
-            { id: 23, topic: "分數約分遺漏公因數", question: "$\\frac{24}{36}$", wrong_process: "$\\frac{6}{9}$", wrong_step: "未約到最簡分數", options: ["未約到最簡分數", "公因數找錯", "完全正確"], correct: 0, explanation: "最大公因數為 12，應化簡為 $\\frac{2}{3}$（$\\frac{6}{9}$ 還可再約分）。" },
-            { id: 24, topic: "乘法對加法分配律漏乘第一項", question: "$4 \\times (5 + 3)$", wrong_process: "$5 + 4 \\times 3$", wrong_step: "漏乘第一項", options: ["漏乘第一項", "計算錯誤", "完全正確"], correct: 0, explanation: "4 必須乘以括號內每一項：$4 \\times 5 + 4 \\times 3 = 32$。" },
-            { id: 25, topic: "連續負號化解完全正確", question: "$-(-(-5))$", wrong_process: "+5", wrong_step: "完全正確", options: ["負號累計次數錯誤", "符號判斷錯誤", "完全正確"], correct: 2, explanation: "總共有三個負號（奇數個），負負得正後再乘一個負號，結果為 $-5$，計算完全正確！" },
-            { id: 26, topic: "分數乘法整數與分母亂約", question: "$5 \\times \\frac{3}{5}$", wrong_process: "$\\frac{25}{3}$", wrong_step: "整數誤乘入分母", options: ["整數乘分母錯誤", "約分錯誤", "完全正確"], correct: 0, explanation: "整數應與分子相乘或與分母約分，結果為 3。" },
-            { id: 27, topic: "中括號與小括號順序顛倒", question: "$[20 \\div (5 - 3)] \\times 2$", wrong_process: "$20 \\div [5 - (3 \\times 2)]$", wrong_step: "擅自更改運算次序", options: ["更改運算次序", "括號計算錯誤", "完全正確"], correct: 0, explanation: "應由內而外計算小括號，不能擅自改變括號層級與順序。" },
-            { id: 28, topic: "分數減法借位觀念錯誤", question: "$3 - 1\\frac{1}{4}$", wrong_process: "$2\\frac{1}{4}$", wrong_step: "未借位", options: ["未借位", "減法錯誤", "完全正確"], correct: 0, explanation: "3 應借位為 $2\\frac{4}{4}$，故 $2\\frac{4}{4} - 1\\frac{1}{4} = 1\\frac{3}{4}$。" },
-            { id: 29, topic: "乘除混合加括號錯誤", question: "$8 \\div 4 \\times \\frac{1}{2}$", wrong_process: "$8 \\div (4 \\times \\frac{1}{2}) = 4$", wrong_step: "擅自加括號改變順序", options: ["擅自加括號改變順序", "計算錯誤", "完全正確"], correct: 0, explanation: "乘除法同級應由左至右：$8 \\div 4 = 2$，$2 \\times \\frac{1}{2} = 1$。" },
-            { id: 30, topic: "負數次方與括號位置陷阱", question: "$-3^2$ 與 $(-3)^2$", wrong_process: "皆為 9", wrong_step: "忽略負號是否受平方影響", options: ["忽略負號受平方影響", "指數錯誤", "完全正確"], correct: 0, explanation: "$-3^2 = -9$，而 $(-3)^2 = 9$，兩者不相等。" },
-            // 31 至 50 題
-            { id: 31, topic: "連續減負數變號錯誤", question: "$10 - (-3) - (-5)$", wrong_process: "$10 - 3 - 5 = 2$", wrong_step: "未將連續減負數轉為加法", options: ["減負數未變號", "加減法順序錯誤", "完全正確"], correct: 0, explanation: "減負數等於加正數，應為 $10 + 3 + 5 = 18$。" },
-            { id: 32, topic: "分數連乘約分錯誤", question: "$\\frac{2}{3} \\times \\frac{3}{4} \\times \\frac{4}{5}$", wrong_process: "$\\frac{24}{60} = \\frac{2}{5}$", wrong_step: "未先約分導致計算繁複或出錯", options: ["未先約分", "分子相乘錯誤", "完全正確"], correct: 0, explanation: "連乘時可先上下互約，直接得到 $\\frac{2}{5}$（雖結果對但過程未先約分）。" },
-            { id: 33, topic: "多重正負號加減運算錯誤", question: "$(-5) + (-3) - (2 - 8)$", wrong_process: "$(-5) + (-3) - 6 = -14$", wrong_step: "括號內減法化簡錯誤", options: ["括號內減法計算錯誤", "外部加減號處理錯誤", "完全正確"], correct: 0, explanation: "$2 - 8 = -6$，故 $-5 - 3 - (-6) = -8 + 6 = -2$。" },
-            { id: 34, topic: "分數加減與整數混合通分錯誤", question: "$1 - \\frac{3}{5} + \\frac{1}{2}$", wrong_process: "$1 - \\frac{4}{7} = \\frac{3}{7}$", wrong_step: "異分母分數直接相加減", options: ["未全部通分", "分母直接相加", "完全正確"], correct: 0, explanation: "應全部化為同分母 10：$\\frac{10}{10} - \\frac{6}{10} + \\frac{5}{10} = \\frac{9}{10}$。" },
-            { id: 35, topic: "零的除法觀念混淆", question: "$0 \\div (-5) + 10$", wrong_process: "$(-5) + 10 = 5$", wrong_step: "零除以數的結果計算錯誤", options: ["零除以負數計算錯誤", "加法錯誤", "完全正確"], correct: 0, explanation: "$0 \\div (-5) = 0$，故 $0 + 10 = 10$。" },
-            { id: 36, topic: "乘法對減法分配律負號遺漏", question: "$-4 \\times (10 - 2)$", wrong_process: "$-4 \\times 10 - 2 = -42$", wrong_step: "分配律未乘到第二項且未變號", options: ["第二項漏乘且未變號", "減法錯誤", "完全正確"], correct: 0, explanation: "應為 $(-4) \\times 10 - (-4) \\times 2 = -40 + 8 = -32$。" },
-            { id: 37, topic: "分數除法與乘法混淆順序", question: "$6 \\div \\frac{2}{3} \\times \\frac{1}{4}$", wrong_process: "$6 \\div \\left(\\frac{2}{3} \\times \\frac{1}{4}\\right) = 36$", wrong_step: "擅自加括號改變由左至右順序", options: ["未由左至右計算", "倒數錯誤", "完全正確"], correct: 0, explanation: "乘除法同級應由左至右：$6 \\times \\frac{3}{2} = 9$，再乘 $\\frac{1}{4}$ 為 $\\frac{9}{4}$。" },
-            { id: 38, topic: "大中小括號內層優先順序錯誤", question: "$18 - [6 + 2 \\times (3 - 5)]$", wrong_process: "1. 先算外層 $18 - 6 = 12$\n2. 繼續計算", wrong_step: "未由內而外先算最內層括號", options: ["未先算最內層括號", "乘法錯誤", "完全正確"], correct: 0, explanation: "必須先算最內層小括號 $3 - 5 = -2$，再算中括號內乘法。" },
-            { id: 39, topic: "帶分數減法借位計算錯誤", question: "$5\\frac{1}{4} - 2\\frac{3}{4}$", wrong_process: "$3\\frac{2}{4} = 3\\frac{1}{2}$", wrong_step: "分子直接大減小而未向整數借位", options: ["分子直接相減未向整數借位", "減法錯誤", "完全正確"], correct: 0, explanation: "因 $\\frac{1}{4} < \\frac{3}{4}$，須向 5 借 1 變成 $4\\frac{5}{4} - 2\\frac{3}{4} = 2\\frac{2}{4} = 2\\frac{1}{2}$。" },
-            { id: 40, topic: "同底數相除指數相減錯誤", question: "$2^5 \\div 2^3$", wrong_process: "$2^{5 \\div 3}$ 或 $1^2$", wrong_step: "指數相除誤算成指數相除或底數相減", options: ["指數相除觀念錯誤", "底數相減錯誤", "完全正確"], correct: 0, explanation: "同底數相除，指數相減：$2^{5-3} = 2^2 = 4$。" },
-            { id: 41, topic: "負數乘方與括號省略陷阱", question: "$-2^4$", wrong_process: "$16$", wrong_step: "誤將負號包含在次方範圍內", options: ["負號未受偶數次方影響", "次方計算錯誤", "完全正確"], correct: 0, explanation: "$-2^4 = -(2 \\times 2 \\times 2 \\times 2) = -16$。" },
-            
-            { id: 43, topic: "多重括號去括號變號錯誤", question: "$5 - \\{2 - [3 - (1 - 4)]\\}$", wrong_process: "1. 直接把所有括號拆開未變號", wrong_step: "未由內而外依序去括號並變號", options: ["未由內而外逐層去括號", "加減法錯誤", "完全正確"], correct: 0, explanation: "先算最內層 $(1 - 4) = -3$，再算中括號 $[3 - (-3)] = 6$，依序向外推算。" },
-            { id: 44, topic: "分數乘法與約分觀念混淆", question: "$\\frac{5}{8} \\times \\frac{4}{15}$", wrong_process: "$\\frac{20}{120} = \\frac{1}{6}$ (未先交叉約分)", wrong_step: "數字過大未先交叉約分導致計算失誤", options: ["未先交叉約分", "分子分母相乘錯誤", "完全正確"], correct: 0, explanation: "交叉約分：5與15約為1和3，4與8約為1和2，得 $\\frac{1}{6}$。" },
-            { id: 45, topic: "負數運算距離觀念混淆", question: "$(-8) - (-3)$", wrong_process: "$(-8) + (-3) = -11$", wrong_step: "減負數誤算為加負數", options: ["減負數應變號為加正數", "加法錯誤", "完全正確"], correct: 0, explanation: "$(-8) - (-3) = -8 + 3 = -5$。" },
-            { id: 46, topic: "乘法分配律對分數加法錯誤", question: "$12 \\times \\left(\\frac{1}{3} + \\frac{1}{4}\\right)$", wrong_process: "$12 \\times \\frac{1}{3} + \\frac{1}{4} = 4 + \\frac{1}{4}$", wrong_step: "分配時漏掉第二項的乘法", options: ["第二項漏乘係數 12", "分數加法錯誤", "完全正確"], correct: 0, explanation: "12 必須乘以每一項：$12 \\times \\frac{1}{3} + 12 \\times \\frac{1}{4} = 4 + 3 = 7$。" },
-            { id: 47, topic: "分數分母含有減法之化簡陷阱", question: "$\\frac{10}{5 - 3}$", wrong_process: "$\\frac{10}{5} - \\frac{10}{3} = 2 - 3\\frac{1}{3}$", wrong_step: "分母含有減法卻對分子做錯誤分配", options: ["分母為減法時不可拆開分子分母", "減法計算錯誤", "完全正確"], correct: 0, explanation: "分母為一個整體 $5 - 3 = 2$，故 $\\frac{10}{2} = 5$。" },
-            { id: 48, topic: "連續正負號化簡順序錯誤", question: "$(-2) + (+3) - (-4) + (-5)$", wrong_process: "$-2 + 3 + 4 - 5 = 0$", wrong_process_correction: "$-2 + 3 + 4 - 5 = 0$ (此題計算正確，設計選項陷阱)", wrong_step: "正負號化簡概念混淆", options: ["正負號化簡錯誤", "加減計算錯誤", "完全正確"], correct: 2, explanation: "連續符號化簡：$-2 + 3 + 4 - 5 = 0，過程完全正確。" },
-            { id: 49, topic: "帶分數除法未化假分數直接相除", question: "$3\\frac{1}{2} \\div 1\\frac{1}{2}$", wrong_process: "$3 \\div 1 = 3$ 且 $\\frac{1}{2} \\div \\frac{1}{2} = 1$，故 $3 \\div 1 = 3$", wrong_step: "帶分數除法將整數與分數獨立相除", options: ["帶分數除法不可拆開獨立計算", "倒數錯誤", "完全正確"], correct: 0, explanation: "必須先化為假分數：$\\frac{7}{2} \\div \\frac{3}{2} = \\frac{7}{2} \\times \\frac{2}{3} = \\frac{7}{3}$。" },
-            { id: 50, topic: "零次方與負數次方觀念混淆", question: "$(-5)^0 - (-2)^{-1}$", wrong_process: "$0 - (-\\frac{1}{2}) = \\frac{1}{2}$", wrong_step: "任何非零數的零次方誤算為 0", options: ["非零數的零次方應為 1", "負指數倒數錯誤", "完全正確"], correct: 0, explanation: "$(-5)^0 = 1$，而 $(-2)^{-1} = -\\frac{1}{2}$，故 $1 - (-\\frac{1}{2}) = 1 + \\frac{1}{2} = \\frac{3}{2}$。" }
+            [
+  {
+    "id": 1,
+    "question": "2/3 + (-3/5)",
+    "incorrect_steps": [
+      "步驟一：將分母與分子分別相加減：(2 + (-3)) / (3 + 5)",
+      "步驟二：計算結果為 -1 / 8"
+    ],
+    "error_step": "步驟一",
+    "explanation": "異分母分數相加減時，分母絕對不能直接相加。必須先求出分母 3 與 5 的最小公倍數進行「通分」，分母保持不變，僅分子進行加減運算。"
+  },
+  {
+    "id": 2,
+    "question": "-5/17 - (12/17 - 5/4)",
+    "incorrect_steps": [
+      "步驟一：去括號時直接去掉括號：-5/17 - 12/17 - 5/4",
+      "步驟二：合併同分母項：(-5 - 12)/17 - 5/4 = -17/17 - 5/4 = -1 - 5/4 = -9/4"
+    ],
+    "error_step": "步驟一",
+    "explanation": "括號前面是負號（減號）時，去括號且去掉小括號內部各項時必須全部「變號」。正確去括號應為：-5/17 - 12/17 + 5/4。"
+  },
+  {
+    "id": 3,
+    "question": "3/4 / (1/2 + 1/4)",
+    "incorrect_steps": [
+      "步驟一：利用分配律將除法分配進去：(3/4 / 1/2) + (3/4 / 1/4)",
+      "步驟二：計算各項並相加得到結果"
+    ],
+    "error_step": "步驟一",
+    "explanation": "「乘法」對加減法具有分配律，但「除法對加減法沒有分配律」。除法無法直接分配進括號內，必須先計算括號內通分後的和，再進行除法運算。"
+  },
+  {
+    "id": 4,
+    "question": "-2(1/3) * (-3/4)",
+    "incorrect_steps": [
+      "步驟一：將帶分數化為假分數：(-7/3) * (-3/4)",
+      "步驟二：相乘後忽略負號：(7/3) * (3/4) = 7/4"
+    ],
+    "error_step": "步驟二",
+    "explanation": "兩數相乘時，同號得正、異號得負。兩個負數相乘（負負得正）其積應為正數，但步驟二漏掉了正負號的判定規則。"
+  },
+  {
+    "id": 5,
+    "question": "4/7 / (-9/11)",
+    "incorrect_steps": [
+      "步驟一：分子除以分子、分母除以分母：(4 / -9) / (7 / 11)",
+      "步驟二：計算最終數值"
+    ],
+    "error_step": "步驟一",
+    "explanation": "分數除法不能直接分子除分子、分母除分母。正確做法是「除以一個不為 0 的數，等於乘以這個數的倒數」：4/7 * (-11/9)。"
+  },
+  {
+    "id": 6,
+    "question": "8/15 - (8/15 + 7/19)",
+    "incorrect_steps": [
+      "步驟一：去括號：8/15 - 8/15 + 7/19",
+      "步驟二：計算結果為 7/19"
+    ],
+    "error_step": "步驟一",
+    "explanation": "括號前方為減號，去括號時括號內的每一項都要變號。正確去括號應為：8/15 - 8/15 - 7/19，結果應為 -7/19。"
+  },
+  {
+    "id": 7,
+    "question": "-3/5 + (-8/7)",
+    "incorrect_steps": [
+      "步驟一：通分，分母找最小公倍數 35：(-3/35) + (-8/35)",
+      "步驟二：分子相加：(-3 + -8)/35 = -11/35"
+    ],
+    "error_step": "步驟一",
+    "explanation": "分母由 5 變為 35 擴大了 7 倍，分子 -3 也必須乘以 7 變成 -21；同理分母 7 變 35 擴大 5 倍，分子 -8 乘以 5 變成 -40。擴分時分子分母必須同乘以相同的數。"
+  },
+  {
+    "id": 8,
+    "question": "比較 -2/9 與 -1/6 的大小",
+    "incorrect_steps": [
+      "步驟一：因為 2/9 大於 1/6",
+      "步驟二：所以 -2/9 > -1/6"
+    ],
+    "error_step": "步驟二",
+    "explanation": "兩個負數比較大小時，絕對值越大其值反而越小。應先通分絕對值：|-2/9| = 4/18，|-1/6| = 3/18，因 4/18 > 3/18，故 -2/9 < -1/6。"
+  },
+  {
+    "id": 9,
+    "question": "-3(4/7) - (-2(1/7))",
+    "incorrect_steps": [
+      "步驟一：拆開整數與分數：-3 - 4/7 - 2 - 1/7",
+      "步驟二：計算結果"
+    ],
+    "error_step": "步驟一",
+    "explanation": "減去一個負數等於加上其相反數。-3(4/7) - (-2(1/7)) 應化為 -3(4/7) + 2(1/7)，去括號後整數與分數的符號處理應為：-3 - 4/7 + 2 + 1/7。"
+  },
+  {
+    "id": 10,
+    "question": "7/5 * [(-20) + 5/7]",
+    "incorrect_steps": [
+      "步驟一：使用分配律僅將括號第一項乘以 7/5：7/5 * (-20) + 5/7",
+      "步驟二：計算結果"
+    ],
+    "error_step": "步驟一",
+    "explanation": "乘法對加法的分配律必須將括號外的因數分別乘以括號內的「每一項」，漏掉了第二項與 7/5 的相乘。正確應為：7/5 * (-20) + 7/5 * 5/7。"
+  },
+  {
+    "id": 11,
+    "question": "化簡 -16/64 為最簡分數",
+    "incorrect_steps": [
+      "步驟一：只把分子除以 4：- (16 / 4) / 64 = -4 / 64",
+      "步驟二：得到 -4 / 64"
+    ],
+    "error_step": "步驟一",
+    "explanation": "約分時必須將分子和分母「同除以」它們的公因數，不能只對分子或分母單獨除以某數，否則會改變分數的值。"
+  },
+  {
+    "id": 12,
+    "question": "2/3 + [(-2/3) + 11/13]",
+    "incorrect_steps": [
+      "步驟一：去中括號時全部變號：2/3 - 2/3 - 11/13",
+      "步驟二：計算結果"
+    ],
+    "error_step": "步驟一",
+    "explanation": "括號前面如果是加號（或中括號內維持加法），去括號時括號內的項符號維持不變。正確去括號應為：2/3 - 2/3 + 11/13。"
+  },
+  {
+    "id": 13,
+    "question": "求 -3(2/5) 的倒數",
+    "incorrect_steps": [
+      "步驟一：化為假分數：-17/5",
+      "步驟二：求倒數為 5/17"
+    ],
+    "error_step": "步驟二",
+    "explanation": "正數的倒數為正數，負數的倒數仍為負數。-17/5 的倒數應為 -5/17，不可漏掉負號。"
+  },
+  {
+    "id": 14,
+    "question": "(-2) * 2/5 + (-4/7) * 1(3/4)",
+    "incorrect_steps": [
+      "步驟一：先算前面的加法：(-2) + (-4/7)",
+      "步驟二：再與後面的數相乘"
+    ],
+    "error_step": "步驟一",
+    "explanation": "四則運算規則為「先乘除，後加減」。必須先計算兩段乘積，再將結果相加，不能擅自先做加法。"
+  },
+  {
+    "id": 15,
+    "question": "(-1/2) * 5/6 * 1(1/3)",
+    "incorrect_steps": [
+      "步驟一：判定正負號，認為含有負數所以結果為正：+(1/2 * 5/6 * 4/3)",
+      "步驟二：計算最終數值"
+    ],
+    "error_step": "步驟一",
+    "explanation": "多個不為零的分數連乘時，如果其中含有「奇數個」負數，其積為負數；本題只有 1 個負數（奇數個），積應為負數。"
+  },
+  {
+    "id": 16,
+    "question": "計算數線上坐標 -2(1/6) 與 5(2/3) 的距離",
+    "incorrect_steps": [
+      "步驟一：直接相減：-2(1/6) - 5(2/3)",
+      "步驟二：得到 -7(5/6) 作為距離"
+    ],
+    "error_step": "步驟一",
+    "explanation": "數線上兩點間的距離必須使用「絕對值」，距離恆為非負數。正確應為 |-2(1/6) - 5(2/3)| = 7(5/6)。"
+  },
+  {
+    "id": 17,
+    "question": "求 5/8 的倒數",
+    "incorrect_steps": [
+      "步驟一：把分子分母變號：-5/8",
+      "步驟二：得到倒數為 -5/8"
+    ],
+    "error_step": "步驟一",
+    "explanation": "倒數定義為兩數乘積為 1。正分數 5/8 的倒數是將分子分母上下顛倒，即 8/5，不需要改變正負號。"
+  },
+  {
+    "id": 18,
+    "question": "2/3 - 1/2",
+    "incorrect_steps": [
+      "步驟一：分子相減、分母相減：(2 - 1) / (3 - 2)",
+      "步驟二：得到 1 / 1 = 1"
+    ],
+    "error_step": "步驟一",
+    "explanation": "異分母分數相減必須先通分使分母相同（最小公倍數為 6），分母保持不變，僅分子相減。正確為：4/6 - 3/6 = 1/6。"
+  },
+  {
+    "id": 19,
+    "question": "3/5 / (-9/14) * 2(6/7)",
+    "incorrect_steps": [
+      "步驟一：先將後面的乘法加括號優先算：3/5 / (-9/14 * 20/7)",
+      "步驟二：計算結果"
+    ],
+    "error_step": "步驟一",
+    "explanation": "乘除混合運算應由左而右依序計算，或者將除法統一改為乘以倒數後從左到右連乘，不能擅自改變結合順序先算後面的乘法。"
+  },
+  {
+    "id": 20,
+    "question": "3(1/4) - 1(3/4)",
+    "incorrect_steps": [
+      "步驟一：整數相減，分數直接用大的減小的：(3 - 1) + (3/4 - 1/4)",
+      "步驟二：得到 2 + 2/4 = 2(1/2)"
+    ],
+    "error_step": "步驟一",
+    "explanation": "被減數的分數小於減數的分數時（1/4 < 3/4），不能直接把大的減小的。必須向整數部分借 1（即 4/4）變成 2(5/4) - 1(3/4)，或先將帶分數全部化為假分數再計算。"
+  }
+]
         ];
 
         let currentQuizQuestions = [];
