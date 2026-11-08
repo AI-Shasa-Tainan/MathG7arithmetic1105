@@ -1,416 +1,1033 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Hero: 國一數學分數四則運算錯題偵探室</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Noto Sans TC', 'Fredoka', sans-serif; }
-        .font-fredoka { font-family: 'Fredoka', sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>分數偵探｜找出錯誤！</title>
+<style>
+  :root {
+    --blue: #1a6bb5;
+    --blue-dark: #0d4a8a;
+    --blue-light: #e8f4fc;
+    --orange: #f5a623;
+    --orange-dark: #d4890a;
+    --white: #ffffff;
+    --success: #2ecc71;
+    --error: #e74c3c;
+    --shadow: 0 8px 24px rgba(26,107,181,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: linear-gradient(160deg, #e8f4fc 0%, #fff8ee 50%, #e8f4fc 100%);
+    color: #1a2a3a;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header { text-align: center; padding: 20px 0 12px; }
+  .logo {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .logo span { font-size: 2.6rem; }
+  .subtitle { color: var(--orange-dark); font-size: 1rem; margin-top: 4px; font-weight: 600; }
+
+  .screen { display: none; flex: 1; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  .start-card, .result-card, .level-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 28px 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    margin-top: 12px;
+  }
+  .mascot { font-size: 4rem; margin-bottom: 8px; animation: bounce 2s infinite; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  h2 { color: var(--blue-dark); font-size: 1.4rem; margin-bottom: 10px; }
+
+  .level-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  @media (min-width: 500px) {
+    .level-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .level-btn {
+    border: 3px solid #c5d8e8;
+    border-radius: 18px;
+    padding: 18px 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .level-btn:hover, .level-btn:focus {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    transform: translateY(-2px);
+  }
+  .level-btn .lv-icon { font-size: 2rem; margin-bottom: 6px; }
+  .level-btn .lv-name { font-size: 1.15rem; font-weight: 800; color: var(--blue-dark); }
+  .level-btn .lv-desc { font-size: 0.82rem; color: #666; margin-top: 4px; }
+  .level-btn.low { border-color: #7dcea0; }
+  .level-btn.mid { border-color: #f5b041; }
+  .level-btn.high { border-color: #e74c3c; }
+  .level-btn.low:hover { background: #eafaf1; }
+  .level-btn.mid:hover { background: #fef5e7; }
+  .level-btn.high:hover { background: #fdedec; }
+
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(26,107,181,0.35);
+    transition: transform 0.15s;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 280px;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-orange {
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    box-shadow: 0 6px 20px rgba(245,166,35,0.4);
+  }
+  .btn-outline {
+    background: white;
+    color: var(--blue);
+    border: 3px solid var(--blue);
+    box-shadow: none;
+  }
+  .btn-sm {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    max-width: 200px;
+  }
+
+  .progress-bar {
+    background: #dde8f0;
+    border-radius: 20px;
+    height: 12px;
+    margin: 12px 0 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--orange));
+    border-radius: 20px;
+    transition: width 0.4s ease;
+  }
+  .progress-text { text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 12px; }
+
+  .question-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .badge-tag {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .level-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 6px;
+  }
+  .level-tag.low { background: #d5f5e3; color: #1e8449; }
+  .level-tag.mid { background: #fdebd0; color: #b9770e; }
+  .level-tag.high { background: #fadbd8; color: #922b21; }
+
+  .question-title { font-size: 1.15rem; font-weight: 700; color: var(--blue-dark); margin-bottom: 14px; }
+  .math {
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: var(--blue-light);
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 12px 0;
+  }
+  .steps-box {
+    background: #fff9f0;
+    border: 2px dashed var(--orange);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 14px 0;
+  }
+  .steps-box h4 { color: var(--orange-dark); font-size: 0.95rem; margin-bottom: 10px; }
+  .step {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    font-size: 0.98rem;
+    border-left: 4px solid #ccc;
+  }
+  .step.highlight-error { border-left-color: var(--error); background: #fff0f0; }
+
+  .options { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .option-btn {
+    background: white;
+    border: 3px solid #c5d8e8;
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .option-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+  .option-btn.correct { border-color: var(--success); background: #e8faf0; color: #1a7a45; }
+  .option-btn.wrong { border-color: var(--error); background: #fdeaea; color: #a33; }
+
+  .feedback {
+    display: none;
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 16px;
+    animation: fadeIn 0.4s;
+  }
+  .feedback.show { display: block; }
+  .feedback.success { background: #e8faf0; border: 2px solid var(--success); }
+  .feedback.error { background: #fff5f5; border: 2px solid var(--error); }
+  .feedback h3 { font-size: 1.15rem; margin-bottom: 8px; }
+  .feedback.success h3 { color: #1a7a45; }
+  .feedback.error h3 { color: #c0392b; }
+  .concept-box {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 0.95rem;
+  }
+
+  .next-area { text-align: center; margin-top: 20px; display: none; }
+  .next-area.show { display: block; }
+
+  .score-big { font-size: 2.8rem; font-weight: 800; color: var(--blue-dark); }
+  .stars { font-size: 2rem; margin: 8px 0 16px; }
+  .result-msg { font-size: 1.05rem; margin: 12px 0 20px; color: #444; }
+
+  .record-box {
+    background: #f8fbff;
+    border-radius: 14px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  .record-box h4 { color: var(--blue-dark); margin-bottom: 8px; }
+  .record-box input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #c5d8e8;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    margin: 6px 0 12px;
+  }
+  .history-list {
+    max-height: 160px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    color: #555;
+  }
+  .history-item {
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .qr-box {
+    margin-top: 24px;
+    padding: 18px 14px;
+    background: linear-gradient(135deg, #f0f7ff, #fff8ee);
+    border: 2px dashed var(--blue);
+    border-radius: 18px;
+    text-align: center;
+  }
+  .qr-box h3 { color: var(--blue-dark); font-size: 1.05rem; margin-bottom: 6px; }
+  .qr-box p { font-size: 0.85rem; color: #555; margin-bottom: 12px; }
+  #qrcode {
+    display: inline-block;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  #qrcode img, #qrcode canvas { display: block; width: 160px; height: 160px; }
+  .qr-url { font-size: 0.75rem; color: #888; word-break: break-all; margin-top: 10px; }
+  .qr-tip { font-size: 0.8rem; margin-top: 8px; font-weight: 600; }
+
+  .confetti {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 999; overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute; width: 10px; height: 10px;
+    background: var(--orange);
+    animation: fall 3s linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (max-width: 480px) {
+    .logo { font-size: 1.7rem; }
+    .math { font-size: 1.1rem; }
+  }
+</style>
 </head>
-<body class="bg-indigo-50 min-h-screen text-slate-800 flex flex-col items-center justify-center p-4">
+<body>
+<div class="container">
+  <header>
+    <div class="logo"><span>🔍</span> 分數偵探</div>
+    <div class="subtitle">找出錯誤的計算步驟！</div>
+  </header>
 
-    <!-- 主容器 -->
-    <div class="max-w-3xl w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-indigo-100">
-        
-        <!-- 頂部標題列 -->
-        <div class="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 text-white text-center relative">
-            <h1 class="text-3xl font-bold font-fredoka tracking-wide">Math Hero: 錯題偵探室</h1>
-            <p class="text-indigo-200 text-sm mt-1">國一數學 Ch2-3 分數的四則運算經典錯題偵探室</p>
-        </div>
+  <!-- START / LEVEL SELECT -->
+  <div id="start-screen" class="screen active">
+    <div class="start-card">
+      <div class="mascot">🕵️‍♂️</div>
+      <h2>歡迎來到分數偵探事務所！</h2>
+      <p style="color:#555;font-size:0.95rem;">請選擇難度後開始偵查<br>每次隨機 8 題，找出錯誤步驟</p>
 
-        <!-- 登入畫面 (已移除姓名欄) -->
-        <div id="login-screen" class="p-8 text-center space-y-6">
-            <div class="bg-indigo-50 p-6 rounded-2xl max-w-md mx-auto border border-indigo-100">
-                <h2 class="text-xl font-bold text-indigo-900 mb-4">請輸入您的班級與座號</h2>
-                <div class="space-y-4 text-left">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">班級</label>
-                        <input type="text" id="class-input" placeholder="例如：701" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">座號</label>
-                        <input type="number" id="seat-input" placeholder="例如：15" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-                </div>
-                <button onclick="startGame()" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95">
-                    開始挑戰 10 道題
-                </button>
-            </div>
-        </div>
+      <div class="level-grid">
+        <button class="level-btn low" onclick="startGame('low')">
+          <div class="lv-icon">🌱</div>
+          <div class="lv-name">基礎關卡</div>
+          <div class="lv-desc">通分、基本加減乘除</div>
+        </button>
+        <button class="level-btn mid" onclick="startGame('mid')">
+          <div class="lv-icon">🔥</div>
+          <div class="lv-name">進階關卡</div>
+          <div class="lv-desc">運算順序、帶分數、簡單負號</div>
+        </button>
+        <button class="level-btn high" onclick="startGame('high')">
+          <div class="lv-icon">⚡</div>
+          <div class="lv-name">挑戰關卡</div>
+          <div class="lv-desc">正負符號、混合運算陷阱</div>
+        </button>
+      </div>
 
-        <!-- 遊戲主畫面 (預設隱藏) -->
-        <div id="game-screen" class="p-8 hidden space-y-6">
-            <!-- 進度與分數列 -->
-            <div class="flex justify-between items-center bg-slate-50 px-4 py-3 rounded-xl border">
-                <span id="progress-text" class="text-sm font-bold text-indigo-600">第 1 題 / 共 10 題</span>
-                <div class="flex items-center space-x-3">
-                    <span id="student-badge" class="text-xs bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full"></span>
-                    <span id="score-text" class="text-sm font-bold text-emerald-600">得分：0</span>
-                </div>
-            </div>
-
-            <!-- 題目卡片 -->
-            <div class="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100 space-y-4">
-                <div class="flex items-center justify-between">
-                    <div class="text-xs font-semibold text-indigo-500 uppercase tracking-wider">🎯 任務目標：找出下列計算的錯誤之處</div>
-                </div>
-                <div id="question-title" class="text-2xl font-bold text-slate-900 font-mono"></div>
-                
-                <div class="mt-4">
-                    <div class="text-xs font-semibold text-rose-500 uppercase tracking-wider mb-2">❌ 學生錯誤計算過程：</div>
-                    <div id="incorrect-steps" class="bg-white p-4 rounded-xl border border-rose-100 space-y-2 text-slate-700 font-mono text-sm"></div>
-                </div>
-            </div>
-
-            <!-- 互動問答區 -->
-            <div class="space-y-4">
-                <h3 class="font-bold text-slate-700">💬 請問錯誤發生在哪一個步驟？</h3>
-                <div id="step-options" class="grid grid-cols-2 gap-3"></div>
-
-                <div id="reason-section" class="hidden space-y-3 pt-4 border-t">
-                    <h3 class="font-bold text-slate-700">💡 請選出正確的觀念解釋：</h3>
-                    <div id="reason-options" class="space-y-2"></div>
-                </div>
-            </div>
-
-            <!-- 立即解析回饋 (答題後顯示) -->
-            <div id="feedback-box" class="hidden p-4 rounded-xl border"></div>
-
-            <!-- 下一題按鈕 -->
-            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
-                下一題
-            </button>
-        </div>
-
-        <!-- 結算畫面 (預設隱藏) -->
-        <div id="result-screen" class="p-8 text-center hidden space-y-6">
-            <div class="text-5xl">🏆</div>
-            <h2 class="text-3xl font-bold text-slate-900">挑戰完成！</h2>
-            <p id="final-score" class="text-xl text-indigo-600 font-bold"></p>
-            <div id="student-info-summary" class="text-slate-500 text-sm"></div>
-            <div id="sync-status" class="text-xs text-slate-400">正在將成績同步至老師的雲端試算表...</div>
-            <button onclick="location.reload()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition">
-                再玩一次
-            </button>
-        </div>
-
+      <div class="qr-box">
+        <h3>📱 同學掃碼直接玩</h3>
+        <p>用平板或手機相機掃描下方 QR Code<br>即可進入（不必登入、不必安裝 APP）</p>
+        <div id="qrcode"></div>
+        <div class="qr-url" id="qr-url-text"></div>
+        <div class="qr-tip" id="qr-tip">※ 請先把此網頁上傳到公開網址後再開啟</div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const questionBank = [
-          {
-            "id": 1,
-            "question": "2/3 + (-3/5)",
-            "steps": [
-              "步驟一：將分母與分子分別相加減：(2 + (-3)) / (3 + 5)",
-              "步驟二：計算結果為 -1 / 8"
-            ],
-            "error_step": "步驟一",
-            "explanation": "異分母分數相加減時，分母絕對不能直接相加。必須先求出分母 3 與 5 的最小公倍數進行「通分」，分母保持不變，僅分子進行加減運算。",
-            "distractors": [
-              "通分時分子沒有乘以對應的擴分倍數",
-              "正負數相加時忘記加上負號"
-            ]
-          },
-          {
-            "id": 2,
-            "question": "-5/17 - (12/17 - 5/4)",
-            "steps": [
-              "步驟一：去括號時直接去掉括號：-5/17 - 12/17 - 5/4",
-              "步驟二：合併同分母項：(-5 - 12)/17 - 5/4 = -17/17 - 5/4 = -1 - 5/4 = -9/4"
-            ],
-            "error_step": "步驟一",
-            "explanation": "括號前面是負號（減號）時，去括號且去掉小括號內部各項時必須全部「變號」。正確去括號應為：-5/17 - 12/17 + 5/4。",
-            "distractors": [
-              "去括號時漏掉了第一個分數的負號",
-              "通分時分母計算錯誤"
-            ]
-          },
-          {
-            "id": 3,
-            "question": "3/4 ÷ (1/2 + 1/4)",
-            "steps": [
-              "步驟一：利用分配律將除法分配進去：(3/4 ÷ 1/2) + (3/4 ÷ 1/4)",
-              "步驟二：計算各項並相加得到結果"
-            ],
-            "error_step": "步驟一",
-            "explanation": "「乘法」對加減法具有分配律，但「除法對加減法沒有分配律」。除法無法直接分配進括號內，必須先計算括號內通分後的和，再進行除法運算。",
-            "distractors": [
-              "將除法改成乘法時沒有顛倒上下分子分母",
-              "計算時沒有先算括號內反而先算外圍乘除"
-            ]
-          },
-          {
-            "id": 4,
-            "question": "-2(1/3) × (-3/4)",
-            "steps": [
-              "步驟一：將帶分數化為假分數：(-7/3) × (-3/4)",
-              "步驟二：相乘後忽略負號：(7/3) × (3/4) = 7/4"
-            ],
-            "error_step": "步驟二",
-            "explanation": "兩數相乘時，同號得正、異號得負。兩個負數相乘（負負得正）其積應為正數，但步驟二漏掉了正負號的判定規則。",
-            "distractors": [
-              "帶分數化為假分數時整數部分乘錯",
-              "約分時將分子與分母顛倒"
-            ]
-          },
-          {
-            "id": 5,
-            "question": "4/7 ÷ (-9/11)",
-            "steps": [
-              "步驟一：分子除以分子、分母除以分母：(4 ÷ -9) / (7 ÷ 11)",
-              "步驟二：計算最終數值"
-            ],
-            "error_step": "步驟一",
-            "explanation": "分數除法不能直接分子除分子、分母除分母。正確做法是「除以一個不為 0 的數，等於乘以這個數的倒數」：4/7 × (-11/9)。",
-            "distractors": [
-              "顛倒除數時沒有同時改變正負號",
-              "通分時找錯了公分母"
-            ]
-          },
-          {
-            "id": 6,
-            "question": "8/15 - (8/15 + 7/19)",
-            "steps": [
-              "步驟一：去括號：8/15 - 8/15 + 7/19",
-              "步驟二：計算結果為 7/19"
-            ],
-            "error_step": "步驟一",
-            "explanation": "括號前方為減號，去括號時括號內的每一項都要變號。正確去括號應為：8/15 - 8/15 - 7/19，結果應為 -7/19。",
-            "distractors": [
-              "交換律使用錯誤導致正負號顛倒",
-              "通分時分母相加而非保持不變"
-            ]
-          },
-          {
-            "id": 7,
-            "question": "-3/5 + (-8/7)",
-            "steps": [
-              "步驟一：通分，分母找最小公倍數 35：(-3/35) + (-8/35)",
-              "步驟二：分子相加：(-3 + -8)/35 = -11/35"
-            ],
-            "error_step": "步驟一",
-            "explanation": "分母由 5 變為 35 擴大了 7 倍，分子 -3 也必須乘以 7 變成 -21；同理分母 7 變 35 擴大 5 倍，分子 -8 乘以 5 變成 -40。擴分時分子分母必須同乘以相同的數。",
-            "distractors": [
-              "異分母相加時直接把分子相加",
-              "正負數絕對值相加時搞錯方向"
-            ]
-          },
-          {
-            "id": 8,
-            "question": "比較 -2/9 與 -1/6 的大小",
-            "steps": [
-              "步驟一：因為 2/9 大於 1/6",
-              "步驟二：所以 -2/9 > -1/6"
-            ],
-            "error_step": "步驟二",
-            "explanation": "兩個負數比較大小時，絕對值越大其值反而越小。應先通分絕對值：|-2/9| = 4/18，|-1/6| = 3/18，因 4/18 > 3/18，故 -2/9 < -1/6。",
-            "distractors": [
-              "通分時分母計算錯誤",
-              "誤以為負數絕對值大其值就大"
-            ]
-          },
-          {
-            "id": 9,
-            "question": "-3(4/7) - (-2(1/7))",
-            "steps": [
-              "步驟一：拆開整數與分數：-3 - 4/7 - 2 - 1/7",
-              "步驟二：計算結果"
-            ],
-            "error_step": "步驟一",
-            "explanation": "減去一個負數等於加上其相反數。-3(4/7) - (-2(1/7)) 應化為 -3(4/7) + 2(1/7)，去括號後整數與分數的符號處理應為：-3 - 4/7 + 2 + 1/7。",
-            "distractors": [
-              "帶分數轉假分數時符號放錯位置",
-              "整數部分與分數部分相減時方向錯誤"
-            ]
-          },
-          {
-            "id": 10,
-            "question": "7/5 × [(-20) + 5/7]",
-            "steps": [
-              "步驟一：使用分配律僅將括號第一項乘以 7/5：7/5 × (-20) + 5/7",
-              "步驟二：計算結果"
-            ],
-            "error_step": "步驟一",
-            "explanation": "乘法對加法的分配律必須將括號外的因數分別乘以括號內的「每一項」，漏掉了第二項與 7/5 的相乘。正確應為：7/5 × (-20) + 7/5 × 5/7。",
-            "distractors": [
-              "分配律展開時符號變號錯誤",
-              "約分時將分子分母乘錯數字"
-            ]
-          }
-        ];
+  <!-- GAME -->
+  <div id="game-screen" class="screen">
+    <div class="progress-text" id="progress-text">第 1 / 8 題</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:12.5%"></div></div>
+    <div class="question-card" id="question-area"></div>
+    <div class="next-area" id="next-area">
+      <button class="btn btn-orange" id="next-btn" onclick="nextQuestion()">下一題 →</button>
+    </div>
+  </div>
 
-        let currentQuestions = [];
-        let currentIndex = 0;
-        let score = 0;
-        let studentInfo = {};
-        let selectedStep = null;
-        let questionLog = [];
+  <!-- RESULT -->
+  <div id="result-screen" class="screen">
+    <div class="result-card">
+      <div style="font-size:4.5rem;" id="badge-icon">🏅</div>
+      <div class="score-big" id="final-score">0 / 8</div>
+      <div style="color:#666;margin-bottom:8px;">正確題數</div>
+      <div class="stars" id="stars"></div>
+      <div class="result-msg" id="result-msg"></div>
 
-        // ★★★ 名稱已改為 GAS_URL，請在此處填入您的 Google Apps Script 網頁應用程式網址 ★★★
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxJkCcgLpIBU7CEVDoqcFN9l1c1gyCRZFYjcBG4jYAHzUqQmYoiIpYbc073-3u7ybe8FA/exec";
+      <!-- 答題記錄區 -->
+      <div class="record-box">
+        <h4>📝 儲存本次成績（選填）</h4>
+        <label style="font-size:0.85rem;color:#555;">班級座號</label>
+        <input type="text" id="student-name" placeholder="例如：70135" maxlength="20">
 
-        function startGame() {
-            const className = document.getElementById('class-input').value.trim();
-            const seatNo = document.getElementById('seat-input').value.trim();
+        <button class="btn btn-sm" onclick="saveRecord()">儲存到本機紀錄</button>
+        <button class="btn btn-sm btn-outline" style="margin-top:8px;" onclick="downloadCSV()">下載 CSV 成績單</button>
 
-            if (!className || !seatNo) {
-                alert('請完整填寫班級與座號！');
-                return;
-            }
+        <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #c5d8e8;" id="sheet-area">
+          <div style="font-size:0.9rem;font-weight:700;color:var(--blue-dark);margin-bottom:8px;">📊 送到老師的成績表</div>
+          <button class="btn btn-sm btn-orange" onclick="submitToSheet()" id="btn-sheet">一鍵送出成績到試算表</button>
+          <div id="sheet-status" style="font-size:0.82rem;margin-top:8px;color:#666;"></div>
+          <!-- 進階：若老師沒預先設定網址，才顯示手動輸入 -->
+          <div id="sheet-manual" style="display:none;margin-top:10px;">
+            <label style="font-size:0.8rem;color:#555;">老師尚未設定網址，請手動貼上 Web App 網址</label>
+            <input type="text" id="sheet-url" placeholder="https://script.google.com/macros/s/xxxxx/exec">
+          </div>
+        </div>
 
-            studentInfo = { className, seatNo };
+        <div style="margin-top:14px;">
+          <div style="font-size:0.85rem;color:#555;margin-bottom:4px;">本機歷史紀錄</div>
+          <div class="history-list" id="history-list">尚無紀錄</div>
+        </div>
+      </div>
 
-            currentQuestions = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 10);
-            currentIndex = 0;
-            score = 0;
-            questionLog = [];
+      <button class="btn" onclick="showStart()">回首頁選難度</button>
+      <br>
+      <button class="btn btn-outline" style="margin-top:10px;" onclick="startGame(currentLevel)">再玩同一難度 🔄</button>
+    </div>
+  </div>
+</div>
 
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('student-badge').innerText = `${className}班 ${seatNo}號`;
+<div class="confetti" id="confetti"></div>
 
-            loadQuestion();
-        }
+<script>
+// ============================================================
+// 【老師設定區】把 Google Apps Script 的 Web App 網址貼在這裡
+// 設定一次後，學生就不用再貼網址，只要輸入暱稱點「送出」即可
+// 範例：const TEACHER_SHEET_URL = "https://script.google.com/macros/s/AKfycbwxXvI5ZZIz1YO0ZagKZMiFgtdH44_7c9K9_UV-S70TktByqO4eNaDoD4ipmwmXc-M9KQ/exec";
+// ============================================================
+const TEACHER_SHEET_URL = "";   // ← 請老師把網址貼在雙引號中間
 
-        function loadQuestion() {
-            selectedStep = null;
-            document.getElementById('feedback-box').classList.add('hidden');
-            document.getElementById('next-btn').classList.add('hidden');
-            document.getElementById('reason-section').classList.add('hidden');
+// ===================== 試題（含難度標記） =====================
+const allQuestions = [
+  // ===== 基礎 low =====
+  {
+    id: 1, level: "low", type: "加法",
+    question: "計算：\\(\\dfrac{1}{2} + \\dfrac{1}{3}\\)",
+    wrongSteps: ["步驟①：分子相加 → 1 + 1 = 2", "步驟②：分母相加 → 2 + 3 = 5", "步驟③：得到答案 \\(\\dfrac{2}{5}\\)"],
+    correctStep: 1,
+    options: ["步驟① 分子相加", "步驟② 分母相加", "步驟③ 得到答案"],
+    explanation: "分數加法不能直接把分子和分母分別相加！必須先通分。正確：\\(\\dfrac{1}{2}=\\dfrac{3}{6}\\)，\\(\\dfrac{1}{3}=\\dfrac{2}{6}\\)，所以 \\(\\dfrac{3}{6}+\\dfrac{2}{6}=\\dfrac{5}{6}\\)。"
+  },
+  {
+    id: 2, level: "low", type: "減法",
+    question: "計算：\\(\\dfrac{3}{4} - \\dfrac{1}{6}\\)",
+    wrongSteps: ["步驟①：分子相減 → 3 − 1 = 2", "步驟②：分母相減 → 4 − 6 = −2", "步驟③：得到答案 \\(\\dfrac{2}{-2} = -1\\)"],
+    correctStep: 1,
+    options: ["步驟① 分子相減", "步驟② 分母相減", "步驟③ 化簡結果"],
+    explanation: "減法同樣需要通分！正確：最小公倍數 12，\\(\\dfrac{3}{4}=\\dfrac{9}{12}\\)，\\(\\dfrac{1}{6}=\\dfrac{2}{12}\\)，所以 \\(\\dfrac{9}{12}-\\dfrac{2}{12}=\\dfrac{7}{12}\\)。"
+  },
+  {
+    id: 3, level: "low", type: "乘法",
+    question: "計算：\\(\\dfrac{2}{5} \\times \\dfrac{3}{4}\\)",
+    wrongSteps: ["步驟①：分子相乘 → 2 × 3 = 6", "步驟②：分母保持不變 → 分母仍是 5", "步驟③：得到答案 \\(\\dfrac{6}{5}\\)"],
+    correctStep: 1,
+    options: ["步驟① 分子相乘", "步驟② 分母保持不變", "步驟③ 得到答案"],
+    explanation: "分數乘法是「分子乘分子、分母乘分母」！正確：\\(\\dfrac{2\\times3}{5\\times4}=\\dfrac{6}{20}=\\dfrac{3}{10}\\)。"
+  },
+  {
+    id: 4, level: "low", type: "除法",
+    question: "計算：\\(\\dfrac{2}{3} \\div \\dfrac{4}{5}\\)",
+    wrongSteps: ["步驟①：把除法改成乘法", "步驟②：把第一個分數顛倒 → \\(\\dfrac{3}{2} \\times \\dfrac{4}{5}\\)", "步驟③：計算得到 \\(\\dfrac{12}{10}=\\dfrac{6}{5}\\)"],
+    correctStep: 1,
+    options: ["步驟① 改成乘法", "步驟② 把第一個分數顛倒", "步驟③ 計算結果"],
+    explanation: "除法口訣「保留、變號、顛倒」：只把第二個分數顛倒！正確：\\(\\dfrac{2}{3} \\times \\dfrac{5}{4} = \\dfrac{10}{12} = \\dfrac{5}{6}\\)。"
+  },
+  {
+    id: 5, level: "low", type: "加法",
+    question: "計算：\\(\\dfrac{2}{3} + \\dfrac{1}{4}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 12", "步驟②：\\(\\dfrac{2}{3}=\\dfrac{8}{12}\\)，\\(\\dfrac{1}{4}=\\dfrac{3}{12}\\)", "步驟③：分子加分母 → 8+3+12 = 23，得到 \\(\\dfrac{23}{12}\\)"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換分數", "步驟③ 分子加分母"],
+    explanation: "通分後只需要把「分子相加」，分母保持不變！正確：\\(\\dfrac{8}{12}+\\dfrac{3}{12}=\\dfrac{11}{12}\\)。"
+  },
+  {
+    id: 7, level: "low", type: "除法",
+    question: "計算：\\(\\dfrac{3}{4} \\div 2\\)",
+    wrongSteps: ["步驟①：把 2 寫成 \\(\\dfrac{2}{1}\\)", "步驟②：直接分子除以分子、分母除以分母 → \\(\\dfrac{3\\div2}{4\\div1}\\)", "步驟③：得到 \\(\\dfrac{1.5}{4}\\)"],
+    correctStep: 1,
+    options: ["步驟① 把 2 寫成分數", "步驟② 直接上下相除", "步驟③ 得到結果"],
+    explanation: "除以整數 = 乘以它的倒數！正確：\\(\\dfrac{3}{4} \\div 2 = \\dfrac{3}{4} \\times \\dfrac{1}{2} = \\dfrac{3}{8}\\)。"
+  },
+  {
+    id: 9, level: "low", type: "減法",
+    question: "計算：\\(\\dfrac{5}{6} - \\dfrac{1}{2}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 6", "步驟②：\\(\\dfrac{1}{2}=\\dfrac{3}{6}\\)", "步驟③：\\(\\dfrac{5}{6}-\\dfrac{3}{6}=\\dfrac{2}{0}\\)（分母相減）"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換 \\(\\dfrac{1}{2}\\)", "步驟③ 分母也相減"],
+    explanation: "通分後分母保持不變，只減分子！正確：\\(\\dfrac{5}{6}-\\dfrac{3}{6}=\\dfrac{2}{6}=\\dfrac{1}{3}\\)。"
+  },
+  {
+    id: 10, level: "low", type: "加法",
+    question: "計算：\\(\\dfrac{3}{8} + \\dfrac{1}{4}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 8", "步驟②：\\(\\dfrac{1}{4}=\\dfrac{2}{8}\\)", "步驟③：分子相加後分母再加 → \\(\\dfrac{3+2}{8+8}=\\dfrac{5}{16}\\)"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換分數", "步驟③ 分母再加"],
+    explanation: "通分後分母已經相同，就固定不動！正確：\\(\\dfrac{3}{8}+\\dfrac{2}{8}=\\dfrac{5}{8}\\)。"
+  },
+  {
+    id: 14, level: "low", type: "加法",
+    question: "計算：\\(\\dfrac{5}{12} + \\dfrac{1}{3}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 12", "步驟②：\\(\\dfrac{1}{3}=\\dfrac{4}{12}\\)", "步驟③：\\(\\dfrac{5}{12}+\\dfrac{4}{12}=\\dfrac{9}{24}\\)（分母加倍）"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換", "步驟③ 分母加倍"],
+    explanation: "通分後分母不變！正確：\\(\\dfrac{5}{12}+\\dfrac{4}{12}=\\dfrac{9}{12}=\\dfrac{3}{4}\\)。"
+  },
+  {
+    id: 19, level: "low", type: "加法",
+    question: "計算：\\(\\dfrac{2}{5} + \\dfrac{3}{10}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 10", "步驟②：\\(\\dfrac{2}{5}=\\dfrac{4}{10}\\)", "步驟③：\\(\\dfrac{4}{10}+\\dfrac{3}{10}=\\dfrac{7}{20}\\)（分母相加）"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換", "步驟③ 分母相加"],
+    explanation: "通分後分母固定！正確：\\(\\dfrac{4}{10}+\\dfrac{3}{10}=\\dfrac{7}{10}\\)。"
+  },
 
-            const q = currentQuestions[currentIndex];
-            document.getElementById('progress-text').innerText = `第 ${currentIndex + 1} 題 / 共 10 題`;
-            document.getElementById('score-text').innerText = `得分：${score}`;
-            document.getElementById('question-title').innerText = q.question;
+  // ===== 進階 mid =====
+  {
+    id: 6, level: "mid", type: "混合",
+    question: "計算：\\(\\dfrac{1}{2} + \\dfrac{1}{3} \\times \\dfrac{1}{4}\\)",
+    wrongSteps: ["步驟①：先算加法 \\(\\dfrac{1}{2}+\\dfrac{1}{3}=\\dfrac{5}{6}\\)", "步驟②：再乘 \\(\\dfrac{5}{6} \\times \\dfrac{1}{4}=\\dfrac{5}{24}\\)", "步驟③：得到答案 \\(\\dfrac{5}{24}\\)"],
+    correctStep: 0,
+    options: ["步驟① 先算加法", "步驟② 再乘", "步驟③ 得到答案"],
+    explanation: "四則運算順序是「先乘除、後加減」！必須先算乘法：\\(\\dfrac{1}{3}\\times\\dfrac{1}{4}=\\dfrac{1}{12}\\)，再算加法 \\(\\dfrac{1}{2}+\\dfrac{1}{12}=\\dfrac{7}{12}\\)。"
+  },
+  {
+    id: 8, level: "mid", type: "乘法",
+    question: "計算：\\(1\\dfrac{1}{2} \\times \\dfrac{2}{3}\\)",
+    wrongSteps: ["步驟①：帶分數直接乘 → 1 × \\(\\dfrac{2}{3}\\) 再加上 \\(\\dfrac{1}{2}\\times\\dfrac{2}{3}\\)", "步驟②：得到 \\(\\dfrac{2}{3} + \\dfrac{1}{3} = 1\\)", "步驟③：答案是 1"],
+    correctStep: 0,
+    options: ["步驟① 帶分數直接分開乘", "步驟② 相加結果", "步驟③ 答案是 1"],
+    explanation: "帶分數乘法要先化成假分數！\\(1\\dfrac{1}{2}=\\dfrac{3}{2}\\)，所以 \\(\\dfrac{3}{2}\\times\\dfrac{2}{3}=1\\)。方法不正確容易在其他題出錯。"
+  },
+  {
+    id: 11, level: "mid", type: "除法",
+    question: "計算：\\(\\dfrac{5}{6} \\div \\dfrac{2}{3}\\)",
+    wrongSteps: ["步驟①：保留第一個分數", "步驟②：把 ÷ 改成 ×，兩個分數都顛倒 → \\(\\dfrac{6}{5} \\times \\dfrac{3}{2}\\)", "步驟③：得到 \\(\\dfrac{18}{10}=\\dfrac{9}{5}\\)"],
+    correctStep: 1,
+    options: ["步驟① 保留第一個", "步驟② 兩個都顛倒", "步驟③ 計算結果"],
+    explanation: "只顛倒「第二個」分數！正確：\\(\\dfrac{5}{6} \\times \\dfrac{3}{2} = \\dfrac{15}{12} = \\dfrac{5}{4}\\)。"
+  },
+  {
+    id: 13, level: "mid", type: "混合",
+    question: "計算：\\(\\dfrac{2}{3} - \\dfrac{1}{4} \\times \\dfrac{1}{2}\\)",
+    wrongSteps: ["步驟①：先算減法 \\(\\dfrac{2}{3}-\\dfrac{1}{4}=\\dfrac{5}{12}\\)", "步驟②：再乘 \\(\\dfrac{5}{12}\\times\\dfrac{1}{2}=\\dfrac{5}{24}\\)", "步驟③：答案 \\(\\dfrac{5}{24}\\)"],
+    correctStep: 0,
+    options: ["步驟① 先算減法", "步驟② 再乘", "步驟③ 答案"],
+    explanation: "必須先乘除後加減！先算 \\(\\dfrac{1}{4}\\times\\dfrac{1}{2}=\\dfrac{1}{8}\\)，再算 \\(\\dfrac{2}{3}-\\dfrac{1}{8}=\\dfrac{13}{24}\\)。"
+  },
+  {
+    id: 15, level: "mid", type: "除法",
+    question: "計算：\\(2 \\div \\dfrac{1}{4}\\)",
+    wrongSteps: ["步驟①：把 2 寫成 \\(\\dfrac{2}{1}\\)", "步驟②：直接相除 → \\(\\dfrac{2\\div1}{1\\div4}=\\dfrac{2}{0.25}\\)", "步驟③：得到 8"],
+    correctStep: 1,
+    options: ["步驟① 寫成分數", "步驟② 直接上下相除", "步驟③ 得到 8"],
+    explanation: "除以分數 = 乘以倒數！正確：\\(2 \\div \\dfrac{1}{4} = 2 \\times 4 = 8\\)。方法要正確。"
+  },
+  {
+    id: 16, level: "mid", type: "減法",
+    question: "計算：\\(\\dfrac{7}{8} - \\dfrac{1}{4}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 8", "步驟②：\\(\\dfrac{1}{4}=\\dfrac{2}{8}\\)", "步驟③：分子減分母 → 7 − 2 − 8 = −3，得到負數"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換", "步驟③ 分子減分母"],
+    explanation: "只減分子！正確：\\(\\dfrac{7}{8}-\\dfrac{2}{8}=\\dfrac{5}{8}\\)。"
+  },
+  {
+    id: 17, level: "mid", type: "乘法",
+    question: "計算：\\(\\dfrac{3}{5} \\times 4\\)",
+    wrongSteps: ["步驟①：把 4 寫成 \\(\\dfrac{4}{1}\\)", "步驟②：分子分母都乘 4 → \\(\\dfrac{3\\times4}{5\\times4}=\\dfrac{12}{20}\\)", "步驟③：約分得 \\(\\dfrac{3}{5}\\)"],
+    correctStep: 1,
+    options: ["步驟① 寫成分數", "步驟② 分子分母都乘 4", "步驟③ 約分"],
+    explanation: "整數乘分數，只乘分子！正確：\\(\\dfrac{3}{5}\\times4 = \\dfrac{12}{5}\\)。分子分母都乘等於乘以 1。"
+  },
+  {
+    id: 18, level: "mid", type: "混合",
+    question: "計算：\\(\\dfrac{1}{2} \\times \\dfrac{2}{3} + \\dfrac{1}{4}\\)",
+    wrongSteps: ["步驟①：先算加法 \\(\\dfrac{2}{3}+\\dfrac{1}{4}=\\dfrac{11}{12}\\)", "步驟②：再乘 \\(\\dfrac{1}{2}\\times\\dfrac{11}{12}=\\dfrac{11}{24}\\)", "步驟③：答案 \\(\\dfrac{11}{24}\\)"],
+    correctStep: 0,
+    options: ["步驟① 先算加法", "步驟② 再乘", "步驟③ 答案"],
+    explanation: "先乘除後加減！先算 \\(\\dfrac{1}{2}\\times\\dfrac{2}{3}=\\dfrac{1}{3}\\)，再加 \\(\\dfrac{1}{3}+\\dfrac{1}{4}=\\dfrac{7}{12}\\)。"
+  },
+  {
+    id: 20, level: "mid", type: "除法",
+    question: "計算：\\(\\dfrac{4}{5} \\div \\dfrac{2}{3}\\)",
+    wrongSteps: ["步驟①：保留、變號、顛倒", "步驟②：\\(\\dfrac{4}{5} \\times \\dfrac{2}{3}\\)（忘記顛倒）", "步驟③：得到 \\(\\dfrac{8}{15}\\)"],
+    correctStep: 1,
+    options: ["步驟① 口訣", "步驟② 忘記顛倒第二個分數", "步驟③ 計算"],
+    explanation: "一定要顛倒第二個分數！正確：\\(\\dfrac{4}{5} \\times \\dfrac{3}{2} = \\dfrac{12}{10} = \\dfrac{6}{5}\\)。"
+  },
+  {
+    id: 12, level: "mid", type: "乘法",
+    question: "計算：\\(\\dfrac{4}{9} \\times \\dfrac{3}{8}\\)",
+    wrongSteps: ["步驟①：先約分，4 和 8 約成 1 和 2", "步驟②：3 和 9 約成 1 和 3", "步驟③：得到 \\(\\dfrac{1}{3} \\times \\dfrac{1}{2} = \\dfrac{1}{6}\\)（約分位置錯誤）"],
+    correctStep: 2,
+    options: ["步驟① 4與8約分", "步驟② 3與9約分", "步驟③ 約分後位置錯誤"],
+    explanation: "約分時要對應正確位置。正確可先約：\\(\\dfrac{4}{9}\\times\\dfrac{3}{8}=\\dfrac{1}{6}\\)。重點是約分時分子分母要對應。"
+  },
 
-            const stepsContainer = document.getElementById('incorrect-steps');
-            stepsContainer.innerHTML = '';
-            q.steps.forEach((step) => {
-                const div = document.createElement('div');
-                div.innerText = step;
-                stepsContainer.appendChild(div);
-            });
+  // ===== 挑戰 high（正負號為主） =====
+  {
+    id: 21, level: "high", type: "負號・減法",
+    question: "計算：\\(\\dfrac{1}{2} - \\left(-\\dfrac{1}{3}\\right)\\)",
+    wrongSteps: ["步驟①：減去負數，直接變成減法 → \\(\\dfrac{1}{2} - \\dfrac{1}{3}\\)", "步驟②：通分得 \\(\\dfrac{3}{6} - \\dfrac{2}{6}\\)", "步驟③：得到 \\(\\dfrac{1}{6}\\)"],
+    correctStep: 0,
+    options: ["步驟① 減負數變成減正數", "步驟② 通分", "步驟③ 計算結果"],
+    explanation: "減去一個負數等於加上它的相反數！\\(a - (-b) = a + b\\)。正確：\\(\\dfrac{1}{2} + \\dfrac{1}{3} = \\dfrac{5}{6}\\)。"
+  },
+  {
+    id: 22, level: "high", type: "負號・加法",
+    question: "計算：\\(-\\dfrac{2}{5} + \\dfrac{1}{5}\\)",
+    wrongSteps: ["步驟①：分母相同，直接把分子相加 → 2 + 1 = 3（漏掉負號）", "步驟②：得到 \\(\\dfrac{3}{5}\\)", "步驟③：認為答案是正的"],
+    correctStep: 0,
+    options: ["步驟① 分子相加時漏掉負號", "步驟② 寫出答案", "步驟③ 認為是正的"],
+    explanation: "負分數加正分數時，負號要跟著分子一起算！正確：\\(\\dfrac{-2 + 1}{5} = -\\dfrac{1}{5}\\)。"
+  },
+  {
+    id: 23, level: "high", type: "負號・乘法",
+    question: "計算：\\(-\\dfrac{3}{4} \\times \\dfrac{2}{5}\\)",
+    wrongSteps: ["步驟①：分子相乘 3 × 2 = 6，分母 4 × 5 = 20", "步驟②：負號被忘記 → 得到 \\(\\dfrac{6}{20}\\)", "步驟③：約分得 \\(\\dfrac{3}{10}\\)"],
+    correctStep: 1,
+    options: ["步驟① 分子分母相乘", "步驟② 忘記負號", "步驟③ 約分"],
+    explanation: "負數乘正數結果為負！正確：\\(-\\dfrac{3}{4} \\times \\dfrac{2}{5} = -\\dfrac{3}{10}\\)。"
+  },
+  {
+    id: 24, level: "high", type: "負號・乘法",
+    question: "計算：\\(-\\dfrac{2}{3} \\times \\left(-\\dfrac{3}{4}\\right)\\)",
+    wrongSteps: ["步驟①：兩個負數相乘，符號變正", "步驟②：分子 2 × 3 = 6，分母 3 × 4 = 12", "步驟③：得到 \\(-\\dfrac{6}{12} = -\\dfrac{1}{2}\\)（又多寫了負號）"],
+    correctStep: 2,
+    options: ["步驟① 兩負得正", "步驟② 分子分母相乘", "步驟③ 最後又加上負號"],
+    explanation: "負 × 負 = 正！正確：\\(+\\dfrac{6}{12} = \\dfrac{1}{2}\\)。最後不要再多加負號。"
+  },
+  {
+    id: 25, level: "high", type: "負號・除法",
+    question: "計算：\\(-\\dfrac{3}{5} \\div \\dfrac{1}{2}\\)",
+    wrongSteps: ["步驟①：改成乘法，顛倒第二個分數 → \\(-\\dfrac{3}{5} \\times 2\\)", "步驟②：計算得 \\(-\\dfrac{6}{5}\\)", "步驟③：認為負號要變正，得到 \\(\\dfrac{6}{5}\\)"],
+    correctStep: 2,
+    options: ["步驟① 改乘並顛倒", "步驟② 計算結果", "步驟③ 把負號改成正號"],
+    explanation: "負數除以正數結果仍為負！正確：\\(-\\dfrac{6}{5}\\)。符號規則與乘法相同。"
+  },
+  {
+    id: 26, level: "high", type: "負號・減法",
+    question: "計算：\\(-\\dfrac{5}{6} - \\dfrac{1}{3}\\)",
+    wrongSteps: ["步驟①：通分，分母變成 6", "步驟②：\\(\\dfrac{1}{3} = \\dfrac{2}{6}\\)", "步驟③：\\(-\\dfrac{5}{6} - \\dfrac{2}{6} = -\\dfrac{7}{6}\\) 後又變號成正"],
+    correctStep: 2,
+    options: ["步驟① 通分", "步驟② 轉換分數", "步驟③ 最後把負號去掉"],
+    explanation: "負數減正數，結果更負！正確就是 \\(-\\dfrac{7}{6}\\)。"
+  },
+  {
+    id: 27, level: "high", type: "負號・混合",
+    question: "計算：\\(\\dfrac{1}{4} + \\left(-\\dfrac{1}{2}\\right)\\)",
+    wrongSteps: ["步驟①：加上負數等於減去正數 → \\(\\dfrac{1}{4} - \\dfrac{1}{2}\\)", "步驟②：通分得 \\(\\dfrac{1}{4} - \\dfrac{2}{4}\\)", "步驟③：得到 \\(-\\dfrac{1}{4}\\) 後認為應該是正的"],
+    correctStep: 2,
+    options: ["步驟① 加負變減", "步驟② 通分", "步驟③ 最後改成正數"],
+    explanation: "加一個負數就是減去它的絕對值。正確：\\(-\\dfrac{1}{4}\\)。結果是負的，不要強行變正。"
+  },
+  {
+    id: 28, level: "high", type: "負號・除法",
+    question: "計算：\\(\\dfrac{2}{3} \\div \\left(-\\dfrac{4}{5}\\right)\\)",
+    wrongSteps: ["步驟①：保留第一個，改乘，顛倒第二個 → \\(\\dfrac{2}{3} \\times \\left(-\\dfrac{5}{4}\\right)\\)", "步驟②：分子 2 × (-5) = -10，分母 3 × 4 = 12", "步驟③：得到 \\(-\\dfrac{10}{12}\\) 後約分成 \\(\\dfrac{5}{6}\\)（漏掉負號）"],
+    correctStep: 2,
+    options: ["步驟① 顛倒與變號", "步驟② 計算分子分母", "步驟③ 約分時漏掉負號"],
+    explanation: "正數除以負數結果為負！正確：\\(-\\dfrac{5}{6}\\)。約分時負號要保留。"
+  }
+];
 
-            const stepOptions = document.getElementById('step-options');
-            stepOptions.innerHTML = '';
-            
-            q.steps.forEach((_, idx) => {
-                const stepName = `步驟${['一', '二', '三'][idx] || idx+1}`;
-                const btn = document.createElement('button');
-                btn.className = "p-3 border-2 rounded-xl font-bold text-slate-700 hover:border-indigo-500 hover:bg-indigo-50 transition text-center";
-                btn.innerText = stepName;
-                btn.onclick = () => selectStep(stepName, q);
-                stepOptions.appendChild(btn);
-            });
-        }
+// ===================== 遊戲狀態 =====================
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let currentLevel = "low";
+let answerLog = []; // 本次答題詳細記錄
 
-        function selectStep(stepName, q) {
-            selectedStep = stepName;
-            
-            const buttons = document.querySelectorAll('#step-options button');
-            buttons.forEach(b => {
-                if (b.innerText === stepName) {
-                    b.className = "p-3 border-2 border-indigo-600 bg-indigo-50 rounded-xl font-bold text-indigo-700 transition text-center";
-                } else {
-                    b.className = "p-3 border-2 rounded-xl font-bold text-slate-700 hover:border-indigo-500 hover:bg-indigo-50 transition text-center";
-                }
-            });
+const levelNames = { low: "基礎", mid: "進階", high: "挑戰" };
 
-            const reasonSection = document.getElementById('reason-section');
-            reasonSection.classList.remove('hidden');
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-            const reasonOptions = document.getElementById('reason-options');
-            reasonOptions.innerHTML = '';
+function startGame(level) {
+  currentLevel = level || "low";
+  const pool = allQuestions.filter(q => q.level === currentLevel);
+  currentQuestions = shuffle(pool).slice(0, Math.min(8, pool.length));
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+  answerLog = [];
 
-            let options = [q.explanation, ...q.distractors].sort(() => 0.5 - Math.random());
+  document.getElementById('start-screen').classList.remove('active');
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.add('active');
+  showQuestion();
+}
 
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left p-3 border rounded-xl text-sm hover:bg-slate-50 transition font-medium";
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(opt === q.explanation, selectedStep === q.error_step, q);
-                reasonOptions.appendChild(btn);
-            });
-        }
+function showStart() {
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('start-screen').classList.add('active');
+  renderHistory();
+}
 
-        function checkAnswer(isReasonCorrect, isStepCorrect, q) {
-            const feedbackBox = document.getElementById('feedback-box');
-            feedbackBox.classList.remove('hidden');
+function showQuestion() {
+  answered = false;
+  const q = currentQuestions[currentIndex];
+  const progress = ((currentIndex + 1) / currentQuestions.length) * 100;
+  document.getElementById('progress-fill').style.width = progress + '%';
+  document.getElementById('progress-text').textContent =
+    `【${levelNames[currentLevel]}】第 ${currentIndex + 1} / ${currentQuestions.length} 題　得分：${score}`;
 
-            const isCorrect = isStepCorrect && isReasonCorrect;
-            if (isCorrect) {
-                score += 10;
-                feedbackBox.className = "p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800";
-                feedbackBox.innerHTML = `<strong>答對了！</strong><br>${q.explanation}`;
-            } else {
-                feedbackBox.className = "p-4 rounded-xl border bg-rose-50 border-rose-200 text-rose-800";
-                feedbackBox.innerHTML = `<strong>答錯囉！</strong>正確答案應發生在 <strong>${q.error_step}</strong>。<br><strong>正確觀念：</strong>${q.explanation}`;
-            }
+  const area = document.getElementById('question-area');
+  area.innerHTML = `
+    <span class="badge-tag">${q.type}</span>
+    <span class="level-tag ${q.level}">${levelNames[q.level]}</span>
+    <div class="question-title">請找出錯誤發生在哪一步？</div>
+    <div class="math">${q.question}</div>
+    <div class="steps-box">
+      <h4>⚠️ 某位同學的錯誤計算過程：</h4>
+      ${q.wrongSteps.map((s, i) => `<div class="step" id="step-${i}">${s}</div>`).join('')}
+    </div>
+    <div class="options" id="options">
+      ${q.options.map((opt, i) => `
+        <button class="option-btn" onclick="selectOption(${i})">${opt}</button>
+      `).join('')}
+    </div>
+    <div class="feedback" id="feedback"></div>
+  `;
+  document.getElementById('next-area').classList.remove('show');
+  if (window.renderMathInElement) {
+    renderMathInElement(area, {delimiters: [{left: '\\(', right: '\\)', display: false}]});
+  }
+}
 
-            questionLog.push({
-                question: q.question,
-                selectedStep: selectedStep,
-                correctStep: q.error_step,
-                isCorrect: isCorrect
-            });
+function selectOption(idx) {
+  if (answered) return;
+  answered = true;
+  const q = currentQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  const feedback = document.getElementById('feedback');
+  const steps = document.querySelectorAll('.step');
+  const isCorrect = idx === q.correctStep;
 
-            const allBtns = document.querySelectorAll('#step-options button, #reason-options button');
-            allBtns.forEach(b => b.disabled = true);
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correctStep) btn.classList.add('correct');
+    else if (i === idx) btn.classList.add('wrong');
+  });
+  steps[q.correctStep].classList.add('highlight-error');
 
-            document.getElementById('next-btn').classList.remove('hidden');
-        }
+  answerLog.push({
+    id: q.id,
+    type: q.type,
+    level: q.level,
+    correct: isCorrect,
+    chosen: q.options[idx],
+    rightAnswer: q.options[q.correctStep]
+  });
 
-        function nextQuestion() {
-            currentIndex++;
-            if (currentIndex < currentQuestions.length) {
-                loadQuestion();
-            } else {
-                showResult();
-            }
-        }
+  if (isCorrect) {
+    score++;
+    feedback.className = 'feedback success show';
+    feedback.innerHTML = `<h3>🎉 正確！你抓到錯誤了！</h3><div class="concept-box"><strong>正確觀念：</strong><br>${q.explanation}</div>`;
+    spawnConfetti(10);
+  } else {
+    feedback.className = 'feedback error show';
+    feedback.innerHTML = `<h3>😅 還沒抓到！錯誤在「${q.options[q.correctStep]}」</h3><div class="concept-box"><strong>正確觀念：</strong><br>${q.explanation}</div>`;
+  }
 
-        function showResult() {
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.remove('hidden');
-            document.getElementById('final-score').innerText = `您的總得分：${score} 分`;
-            document.getElementById('student-info-summary').innerText = `考生：${studentInfo.className} 班 ${studentInfo.seatNo} 號`;
+  if (window.renderMathInElement) {
+    renderMathInElement(feedback, {delimiters: [{left: '\\(', right: '\\)', display: false}]});
+  }
 
-            syncToGoogleSheets();
-        }
+  document.getElementById('next-area').classList.add('show');
+  document.getElementById('next-btn').textContent =
+    currentIndex === currentQuestions.length - 1 ? '查看成績 🏅' : '下一題 →';
+}
 
-        function syncToGoogleSheets() {
-            if (GAS_URL.includes("https://script.google.com/macros/s/AKfycbxJkCcgLpIBU7CEVDoqcFN9l1c1gyCRZFYjcBG4jYAHzUqQmYoiIpYbc073-3u7ybe8FA/exec")) {
-                document.getElementById('sync-status').innerText = "提示：尚未設定後端 GAS 網址，故未同步至雲端試算表。";
-                return;
-            }
+function nextQuestion() {
+  if (currentIndex < currentQuestions.length - 1) {
+    currentIndex++;
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
 
-            const payload = {
-                timestamp: new Date().toLocaleString(),
-                className: studentInfo.className,
-                seatNo: studentInfo.seatNo,
-                score: score,
-                details: JSON.stringify(questionLog)
-            };
+function showResult() {
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('result-screen').classList.add('active');
+  const total = currentQuestions.length;
+  document.getElementById('final-score').textContent = `${score} / ${total}`;
 
-            fetch(GAS_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            }).then(() => {
-                document.getElementById('sync-status').innerText = "✅ 成績已成功同步至老師的 Google 試算表！";
-            }).catch((error) => {
-                console.error("Sync error:", error);
-                document.getElementById('sync-status').innerText = "⚠️ 成績同步失敗，請檢查網路連線。";
-            });
-        }
-    </script>
+  let stars = '', msg = '', badge = '🏅';
+  const ratio = score / total;
+  if (ratio === 1) {
+    stars = '⭐⭐⭐⭐⭐'; msg = `完美！你是${levelNames[currentLevel]}關卡的分數偵探大師！`; badge = '🏆';
+    spawnConfetti(35);
+  } else if (ratio >= 0.75) {
+    stars = '⭐⭐⭐⭐'; msg = '很棒！再練習一下就完美了！'; badge = '🥇';
+  } else if (ratio >= 0.5) {
+    stars = '⭐⭐⭐'; msg = '不錯喔！繼續練習會越來越強！'; badge = '🥈';
+  } else {
+    stars = '⭐⭐'; msg = '加油！多看解釋，下次一定進步！'; badge = '🥉';
+  }
+  document.getElementById('stars').textContent = stars;
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('badge-icon').textContent = badge;
+  renderHistory();
+}
+
+// ===== 答題記錄（本機 localStorage） =====
+function getHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('fractionDetectiveHistory') || '[]');
+  } catch { return []; }
+}
+
+function saveRecord() {
+  const name = (document.getElementById('student-name').value || '匿名偵探').trim();
+  const record = {
+    name,
+    level: currentLevel,
+    levelName: levelNames[currentLevel],
+    score,
+    total: currentQuestions.length,
+    time: new Date().toLocaleString('zh-TW'),
+    details: answerLog
+  };
+  const history = getHistory();
+  history.unshift(record);
+  if (history.length > 50) history.length = 50; // 最多保留50筆
+  localStorage.setItem('fractionDetectiveHistory', JSON.stringify(history));
+  alert('已儲存到本機紀錄！');
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  if (!list) return;
+  const history = getHistory();
+  if (history.length === 0) {
+    list.innerHTML = '尚無紀錄';
+    return;
+  }
+  list.innerHTML = history.slice(0, 10).map(h =>
+    `<div class="history-item">${h.time}　${h.name}　【${h.levelName}】${h.score}/${h.total}</div>`
+  ).join('');
+}
+
+function downloadCSV() {
+  const history = getHistory();
+  const name = (document.getElementById('student-name').value || '本次未存檔').trim();
+  const rows = [
+    ['時間', '暱稱/座號', '難度', '得分', '總題數', '正確率']
+  ];
+  rows.push([
+    new Date().toLocaleString('zh-TW'),
+    name,
+    levelNames[currentLevel],
+    score,
+    currentQuestions.length,
+    Math.round(score / currentQuestions.length * 100) + '%'
+  ]);
+  history.forEach(h => {
+    rows.push([
+      h.time, h.name, h.levelName, h.score, h.total,
+      Math.round(h.score / h.total * 100) + '%'
+    ]);
+  });
+
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `分數偵探成績_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ===== 送到 Google 試算表（自動使用老師預設網址） =====
+async function submitToSheet() {
+  const status = document.getElementById('sheet-status');
+  const btn = document.getElementById('btn-sheet');
+  const name = (document.getElementById('student-name').value || '匿名偵探').trim();
+
+  // 優先使用老師在程式碼裡設定的網址，其次才用手動輸入
+  let url = (typeof TEACHER_SHEET_URL === 'string' ? TEACHER_SHEET_URL : '').trim();
+  if (!url) {
+    const manual = document.getElementById('sheet-url');
+    if (manual) url = (manual.value || '').trim();
+  }
+
+  if (!url || !url.includes('script.google.com')) {
+    status.style.color = '#c0392b';
+    status.textContent = '老師尚未設定試算表網址，請改用「儲存到本機」或「下載 CSV」';
+    // 顯示手動輸入欄位作為備援
+    const manualBox = document.getElementById('sheet-manual');
+    if (manualBox) manualBox.style.display = 'block';
+    return;
+  }
+
+  if (!name || name === '匿名偵探') {
+    status.style.color = '#c0392b';
+    status.textContent = '請先輸入暱稱或座號再送出';
+    document.getElementById('student-name').focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '傳送中...';
+  status.style.color = '#666';
+  status.textContent = '正在送出成績...';
+
+  const payload = {
+    name: name,
+    level: levelNames[currentLevel],
+    score: score,
+    total: currentQuestions.length,
+    percent: Math.round(score / currentQuestions.length * 100),
+    time: new Date().toLocaleString('zh-TW'),
+    details: answerLog.map(a => (a.correct ? '○' : '×') + a.type).join(' ')
+  };
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    status.style.color = '#1a7a45';
+    status.textContent = '✅ 已成功送出！老師可在 Google 試算表看到你的成績。';
+    saveRecordSilent(name);
+  } catch (err) {
+    status.style.color = '#c0392b';
+    status.textContent = '送出失敗，請檢查網路連線後再試一次。';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '一鍵送出成績到試算表';
+  }
+}
+
+function saveRecordSilent(name) {
+  const record = {
+    name,
+    level: currentLevel,
+    levelName: levelNames[currentLevel],
+    score,
+    total: currentQuestions.length,
+    time: new Date().toLocaleString('zh-TW'),
+    details: answerLog
+  };
+  const history = getHistory();
+  history.unshift(record);
+  if (history.length > 50) history.length = 50;
+  localStorage.setItem('fractionDetectiveHistory', JSON.stringify(history));
+  renderHistory();
+}
+
+// ===== QR Code =====
+function generateQRCode() {
+  const url = window.location.href;
+  const qrContainer = document.getElementById('qrcode');
+  const urlText = document.getElementById('qr-url-text');
+  const tip = document.getElementById('qr-tip');
+  if (!qrContainer) return;
+
+  if (urlText) {
+    urlText.textContent = url.length > 55 ? url.substring(0, 52) + '...' : url;
+    urlText.title = url;
+  }
+
+  const isLocal = url.startsWith('file://') || url.startsWith('blob:') ||
+                  url.includes('localhost') || url.includes('127.0.0.1');
+
+  if (isLocal) {
+    if (tip) {
+      tip.innerHTML = '⚠️ 目前是本機檔案，QR 無法讓其他裝置開啟。<br>👉 請上傳到 <a href="https://app.netlify.com/drop" target="_blank" style="color:#1a6bb5;font-weight:700;">Netlify Drop</a> 取得公開網址後再開啟。';
+      tip.style.color = '#c0392b';
+    }
+    qrContainer.innerHTML = '<div style="width:160px;height:160px;background:#f0f4f8;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#888;font-size:0.85rem;text-align:center;padding:12px;">請先上傳到<br>公開網址<br>才會顯示<br>有效 QR</div>';
+    return;
+  }
+
+  if (tip) {
+    tip.innerHTML = '✅ 同學用相機掃描即可直接進入（免登入）';
+    tip.style.color = '#1a7a45';
+  }
+
+  if (typeof QRCode !== 'undefined') {
+    qrContainer.innerHTML = '';
+    new QRCode(qrContainer, {
+      text: url,
+      width: 160,
+      height: 160,
+      colorDark: '#0d4a8a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } else {
+    const qrApi = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=6&color=0d4a8a&data=' + encodeURIComponent(url);
+    qrContainer.innerHTML = '<img src="' + qrApi + '" alt="QR Code" width="160" height="160">';
+  }
+}
+
+function spawnConfetti(n) {
+  const box = document.getElementById('confetti');
+  const colors = ['#f5a623', '#1a6bb5', '#2ecc71', '#e74c3c', '#9b59b6'];
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDelay = Math.random() * 0.5 + 's';
+    p.style.animationDuration = (2 + Math.random() * 2) + 's';
+    box.appendChild(p);
+    setTimeout(() => p.remove(), 4000);
+  }
+}
+
+// 初始化
+function init() {
+  setTimeout(generateQRCode, 400);
+  renderHistory();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {delimiters:[{left:'\\\\(',right:'\\\\)',display:false}]});"></script>
 </body>
 </html>
